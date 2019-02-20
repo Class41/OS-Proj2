@@ -9,21 +9,7 @@
 
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, FILE* output)
 {
-	
-	// ftok to generate unique key 
-    key_t key = ftok("shmfile",65); 
-  
-    // shmget returns an identifier in shmid 
-    int shmid = shmget(key,sizeof(Shared),0666|IPC_CREAT); 
-  
-    // shmat to attach to shared memory 
-    Shared *data = (Shared*) shmat(shmid,(void*)0,0); 
-  
-	data->seconds = 5;
-  
-	shmdt(data);
-	
-/*	key_t shmkey = ftok("shmshare", 695);
+	key_t shmkey = ftok("shmshare", 695);
 
 	if (shmkey == -1) //check if the input file exists
 	{
@@ -43,7 +29,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			return;
 	}
 	
-	Shared* data = (Shared*)shmat(shmkey, (void*)0, 0);
+	Shared* data = (Shared*)shmat(ipcid, (void*)0, 0);
 
 	if (data == (void*)-1) //check if the input file exists
 	{
@@ -55,7 +41,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	
 	data->seconds = 4;
 
-	shmdt(data);*/
+	shmdt(data);
 }
 
 int main(int argc, char** argv)
