@@ -7,14 +7,26 @@
 #include <sys/shm.h> 
 #include "shared.h"
 
+void AddTime(int* seconds, int* nano, int amount)
+{
+	long newnano = *nano + amount;
 
-void DoFork(int value)
+	while(newnano >= 1000000000)
+	{
+		newnano -= 1000000000;
+		(*seconds)++;
+		*nano = newnano;
+	}
+}
+
+void DoFork(int value, char* output)
 {
 	char* convert[15];
 	sprintf(convert, "%i", value);
 	char* forkarg[]={
 			"./user",
 			convert,
+			output,
 			NULL
 			};
 
@@ -23,7 +35,7 @@ void DoFork(int value)
 	exit(0);
 }
 
-void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, FILE* output)
+void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, char* output)
 {
 	key_t shmkey = ftok("shmshare", 695);
 
@@ -59,9 +71,6 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	data->nanoseconds = 0;
 
 	int pids[childConcurMax];
- 
-
-
 	int pid = fork();
 
 	if(pid == -1)
@@ -78,14 +87,16 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 		while(time(NULL) < terminator)
 		{		
-			waitpid(pid, &status, WNOHANG);	
+			waitpid(pid, &status, WNOHANG);
+			AddTime(&(data->seconds), &(data->nanoseconds), 50000);
+	
 		}
 	
 		kill(pid, SIGTERM);
 	}
 	else //TODO: child
 	{
-	   DoFork(1000000001);
+	   DoFork(500000, output);
 	}
 	
 	shmdt(data);
@@ -142,6 +153,9 @@ int main(int argc, char** argv)
 	FILE* input = fopen(inputName, "r"); //open input/output files specified
 	FILE* output = fopen(outputName, "wr");
 
+	fprintf(output, "***Begin Of File***\n\n");
+	fclose(output);
+
 	if (input == NULL) //check if the input file exists
 	{
 			printf("\n%s: ", argv[0]);
@@ -150,7 +164,7 @@ int main(int argc, char** argv)
 			return;
 	}
 
-	DoSharedWork(argv[0], childMax, childConcurMax, input, output);
+	DoSharedWork(argv[0], childMax, childConcurMax, input, outputName);
 	
 	return 0;
 }

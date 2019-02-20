@@ -57,11 +57,15 @@ int main(int argc, char** argv)
 	Target targtime = AddTime(data->seconds, data->nanoseconds, atoi(argv[1]));
 	
 	printf("%s: Argument got: %i, Shared get: %i, added seconds: %i, added nanoseconds: %i", argv[0], atoi(argv[1]), data->seconds, targtime.seconds, targtime.nanoseconds);
+	fflush(stdout);
 
 	while(data->seconds < targtime.seconds && data->nanoseconds < targtime.nanoseconds);
 	
-	printf("Child Dies");
-
+	FILE* output = fopen(argv[2], "a");
+	fprintf(output, "%s: CHILD PID: %i, PPID: %i: RIP. Time of death: %i sec %i nano. Was fun while it lasted.\n", filename, getpid(), getppid(), data->seconds, data->nanoseconds);
+	fclose(output);
+	
+	shmdt(data);
 	exit(0);	
 
 	return 0;

@@ -1,0 +1,3 @@
+***Begin Of File***
+
+./user: CHILD PID: 28788, PPID: 28787: RIP. Time of death: 0 sec 0 nano. Was fun while it lasted.
