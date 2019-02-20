@@ -3,7 +3,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <sys/ipc.h> 
+#include <sys/shm.h> 
+#include "shared.h"
 
+void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, FILE* output)
+{
+	key_t shmkey = ftok("shmshare", 25565);
+
+	int ipcid = shmget(shmkey, sizeof(Shared), 0666|IPC_CREAT);
+
+	Shared* data = (Shared*)shmat(shmkey, (void*)0, 0);
+
+
+	shmdt(data);
+}
 
 int main(int argc, char** argv)
 {
@@ -62,6 +76,8 @@ int main(int argc, char** argv)
 			perror("Error: Failed to open input file");
 			return;
 	}
+
+	DoSharedWork(argv[0], childMax, childConcurMax, input, output);
 	
 	return 0;
 }
