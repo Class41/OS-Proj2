@@ -8,6 +8,19 @@
 #include "shared.h"
 
 
+void DoFork(int value)
+{
+	char* convert[15];
+	sprintf(convert, "%i", value);
+	char* forkarg[]={
+			"./user",
+			convert,
+			NULL
+			};
+
+	execv(forkarg[0], forkarg);
+}
+
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, FILE* output)
 {
 	key_t shmkey = ftok("shmshare", 695);
@@ -41,7 +54,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	}
 
 	data->seconds = 4;
-	
+
 	int pid = fork();
 
 	if(pid == -1)
@@ -53,14 +66,15 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	}
 	else if(pid > 0) //TODO: parent
 	{
-		
+		wait(NULL);	
 	}
 	else //TODO: child
 	{
-	   
+	   DoFork(5);
 	}
 	
 	shmdt(data);
+	exit(0);
 }
 
 int main(int argc, char** argv)
