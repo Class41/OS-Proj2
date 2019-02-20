@@ -7,6 +7,7 @@
 #include <sys/shm.h> 
 #include "shared.h"
 
+
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, FILE* output)
 {
 	key_t shmkey = ftok("shmshare", 695);
@@ -38,9 +39,27 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			perror("Error: Failed to attach to shared memory");
 			return;
 	}
-	
-	data->seconds = 4;
 
+	data->seconds = 4;
+	
+	int pid = fork();
+
+	if(pid == -1)
+	{
+		printf("\n%s: ", filename);
+		fflush(stdout);
+		perror("Error: Failed to fork");
+		return;
+	}
+	else if(pid > 0) //TODO: parent
+	{
+		
+	}
+	else //TODO: child
+	{
+	   
+	}
+	
 	shmdt(data);
 }
 
