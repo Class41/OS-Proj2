@@ -2,8 +2,13 @@
 
 typedef struct {
 	int seconds;
-	int miliseconds;
+	int nanoseconds;
 } Shared;
+
+typedef struct {
+	int seconds;
+	int nanoseconds;
+} Target;
 
 #define SHARED_H
 #endif

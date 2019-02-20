@@ -19,6 +19,8 @@ void DoFork(int value)
 			};
 
 	execv(forkarg[0], forkarg);
+	printf("Exec failed! Aborting.");
+	exit(0);
 }
 
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, FILE* output)
@@ -70,7 +72,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	}
 	else //TODO: child
 	{
-	   DoFork(5);
+	   DoFork(1000000001);
 	}
 	
 	shmdt(data);
