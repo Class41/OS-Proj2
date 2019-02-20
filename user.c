@@ -6,7 +6,7 @@
 
 Target AddTime(int seconds, int nanoseconds, int amt)
 {
-	long newnano = nanoseconds + amt;
+	int newnano = nanoseconds + amt;
 
 	while(newnano >= 1000000000)
 	{
@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 
 	Target targtime = AddTime(data->seconds, data->nanoseconds, atoi(argv[1]));
 	
-	printf("%s: Argument got: %i, Shared get: %i, added seconds: %i, added nanoseconds: %i", argv[0], atoi(argv[1]), data->seconds, targtime.seconds, targtime.nanoseconds);
+	printf("%s: Argument got: %i, SHARED(%i %i), added seconds: %i, added nanoseconds: %i\n", argv[0], atoi(argv[1]), data->seconds, data->nanoseconds, targtime.seconds, targtime.nanoseconds);
 	fflush(stdout);
 
 	while(data->seconds < targtime.seconds && data->nanoseconds < targtime.nanoseconds);

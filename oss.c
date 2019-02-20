@@ -9,14 +9,14 @@
 
 void AddTime(int* seconds, int* nano, int amount)
 {
-	long newnano = *nano + amount;
+	int newnano = *nano + amount;
 
 	while(newnano >= 1000000000)
 	{
 		newnano -= 1000000000;
 		(*seconds)++;
-		*nano = newnano;
 	}
+	*nano = newnano;
 }
 
 void DoFork(int value, char* output)
@@ -88,7 +88,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		while(time(NULL) < terminator)
 		{		
 			waitpid(pid, &status, WNOHANG);
-			AddTime(&(data->seconds), &(data->nanoseconds), 50000);
+			AddTime(&(data->seconds), &(data->nanoseconds), 1);
 	
 		}
 	
@@ -96,10 +96,11 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	}
 	else //TODO: child
 	{
-	   DoFork(500000, output);
+	   DoFork(100, output);
 	}
 	
 	shmdt(data);
+	shmctl(ipcid, IPC_RMID, NULL);
 	exit(0);
 }
 
@@ -148,7 +149,8 @@ int main(int argc, char** argv)
 			}
 	}
 
-	printf("\n%s: Info: input file: %s, output file: %s, max total: %i, max concurrent: %i", argv[0], inputName, outputName, childMax, childConcurMax);
+	printf("\n%s: Info: input file: %s, output file: %s, max total: %i, max concurrent: %i\n\n", argv[0], inputName, outputName, childMax, childConcurMax);
+	fflush(stdout);
 
 	FILE* input = fopen(inputName, "r"); //open input/output files specified
 	FILE* output = fopen(outputName, "wr");
