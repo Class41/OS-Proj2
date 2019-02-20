@@ -1,6 +1,6 @@
 #ifndef SHARED_H
 
-typedef {
+typedef struct {
 	int seconds;
 	int miliseconds;
 } Shared;

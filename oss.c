@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 
 
-int main()
+int main(int argc, char** argv)
 {
 	int optionItem;
 	int childMax = 4;
@@ -14,8 +14,8 @@ int main()
 	char* inputName = malloc(50 * sizeof(char) + 1); //store filenames
 	char* outputName = malloc(50 * sizeof(char) + 1);
 
-	strcpy(inputName, "input.dat"); //put initial strings into the malloc
-	strcpy(outputName, "output.dat");
+	strcpy(inputName, "input.txt"); //put initial strings into the malloc
+	strcpy(outputName, "output.txt");
 	while ((optionItem = getopt(argc, argv, "hi:o:n:s:")) != -1) //read option list
 	{
 			switch (optionItem)
