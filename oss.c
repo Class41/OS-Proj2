@@ -9,12 +9,16 @@
 
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, FILE* output)
 {
-	key_t shmkey = ftok("shmshare", 25565);
 
-	int ipcid = shmget(shmkey, sizeof(Shared), 0666|IPC_CREAT);
 
-	Shared* data = (Shared*)shmat(shmkey, (void*)0, 0);
 
+	key_t shmkey = ftok("shmshare", 65);
+
+	int ipcid = shmget(shmkey, 85 * sizeof(Shared), 0666|IPC_CREAT);
+
+	Shared* data = (Shared*)shmat(shmkey, NULL, 0);
+	
+	data->seconds = 5;
 
 	shmdt(data);
 }
