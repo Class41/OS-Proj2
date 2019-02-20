@@ -9,34 +9,15 @@
 
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, FILE* output)
 {
+	key_t shmkey = ftok("shmshare", 99656);
 
-    // ftok to generate unique key 
-    key_t key = ftok("shmfile",65); 
-  
-    // shmget returns an identifier in shmid 
-    int shmid = shmget(key,1024,0666|IPC_CREAT); 
-  
-    // shmat to attach to shared memory 
-    char *str = (char*) shmat(shmid,(void*)0,0); 
-  
-    cout<<"Write Data : "; 
-    gets(str); 
-  
-    printf("Data written in memory: %s\n",str); 
-      
-    //detach from shared memory  
-    shmdt(str); 
-  
-
-	/*key_t shmkey = ftok("shmshare", 65);
-
-	int ipcid = shmget(shmkey, 85 * sizeof(Shared), 0666|IPC_CREAT);
+	int ipcid = shmget(shmkey, sizeof(Shared), 0666|IPC_CREAT);
 
 	Shared* data = (Shared*)shmat(shmkey, NULL, 0);
 	
-	data->seconds = 5;
+	data->seconds = 4;
 
-	shmdt(data);*/
+	shmdt(data);
 }
 
 int main(int argc, char** argv)
