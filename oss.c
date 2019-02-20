@@ -10,10 +10,14 @@
 
 int* cPids;
 int numpids;
+int ipcid;
+Shared* data;
+char* filen;
+char* outfilename;
 
 void handler(int signal)
 {
-	printf("Kill Signal Caught. Killing children and terminating...");
+	printf("%s: Kill Signal Caught. Killing children and terminating...", filen);
 	fflush(stdout);
 	
 	int i;
@@ -25,7 +29,15 @@ void handler(int signal)
 		}
 	}
 
+	FILE* out = fopen(outfilename, "a");
+	fprintf(out, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filen, data->seconds, data->nanoseconds);
+	fclose(out);
+
+
 	free(cPids);
+	shmctl(ipcid, IPC_RMID, NULL);	
+
+
 	kill(getpid(), SIGTERM);
 }
 
@@ -59,8 +71,11 @@ void DoFork(int value, char* output)
 
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, char* output)
 {
+	filen = filename;
+	outfilename = output;
+	
 	key_t shmkey = ftok("shmshare", 695);
-
+	
 	if (shmkey == -1) //check if the input file exists
 	{
 			printf("\n%s: ", filename);
@@ -69,7 +84,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			return;
 	}
 
-	int ipcid = shmget(shmkey, sizeof(Shared), 0600|IPC_CREAT);
+	ipcid = shmget(shmkey, sizeof(Shared), 0600|IPC_CREAT);
 
 	if (ipcid == -1) //check if the input file exists
 	{
@@ -79,7 +94,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			return;
 	}
 	
-	Shared* data = (Shared*)shmat(ipcid, (void*)0, 0);
+	data = (Shared*)shmat(ipcid, (void*)0, 0);
 
 	if (data == (void*)-1) //check if the input file exists
 	{
@@ -115,7 +130,10 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			AddTime(&(data->seconds), &(data->nanoseconds), 20000);	
 		}
 	
-		kill(pid, SIGTERM);
+		FILE* out = fopen(output, "a");
+		fprintf(out, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);		
+		fclose(out);
+		
 	}
 	else //TODO: child
 	{
