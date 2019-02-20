@@ -55,7 +55,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			return;
 	}
 
-	data->seconds = 4;
+	data->seconds = 10;
 
 	int pid = fork();
 
@@ -68,7 +68,15 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	}
 	else if(pid > 0) //TODO: parent
 	{
-		wait(NULL);	
+		time_t terminator = time(NULL) + 2;
+		int status;
+
+		while(time(NULL) < terminator)
+		{		
+			waitpid(pid, &status, WNOHANG);	
+		}
+	
+		kill(pid, SIGTERM);
 	}
 	else //TODO: child
 	{
