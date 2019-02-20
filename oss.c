@@ -55,7 +55,12 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			return;
 	}
 
-	data->seconds = 10;
+	data->seconds = 0;
+	data->nanoseconds = 0;
+
+	int pids[childConcurMax];
+ 
+
 
 	int pid = fork();
 
