@@ -6,6 +6,28 @@
 #include <sys/ipc.h> 
 #include <sys/shm.h> 
 #include "shared.h"
+#include <signal.h>
+
+int* cPids;
+int numpids;
+
+void handler(int signal)
+{
+	printf("Kill Signal Caught. Killing children and terminating...");
+	fflush(stdout);
+	
+	int i;
+	for(i = 0; i < numpids; i++)
+	{
+		if(cPids[i] > 0)
+		{
+			kill(cPids[i], SIGTERM);
+		}
+	}
+
+	free(cPids);
+	kill(getpid(), SIGTERM);
+}
 
 void AddTime(int* seconds, int* nano, int amount)
 {
@@ -70,7 +92,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	data->seconds = 0;
 	data->nanoseconds = 0;
 
-	int pids[childConcurMax];
+	cPids = calloc(childConcurMax, sizeof(int));
 	int pid = fork();
 
 	if(pid == -1)
@@ -84,19 +106,20 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	{
 		time_t terminator = time(NULL) + 2;
 		int status;
+		signal(SIGQUIT, handler);
+		signal(SIGINT, handler);
 
 		while(time(NULL) < terminator)
-		{		
+		{	
 			waitpid(pid, &status, WNOHANG);
-			AddTime(&(data->seconds), &(data->nanoseconds), 1);
-	
+			AddTime(&(data->seconds), &(data->nanoseconds), 20000);	
 		}
 	
 		kill(pid, SIGTERM);
 	}
 	else //TODO: child
 	{
-	   DoFork(100, output);
+	   DoFork(100000, output);
 	}
 	
 	shmdt(data);

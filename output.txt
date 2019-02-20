@@ -1,3 +1,3 @@
 ***Begin Of File***
 
-./user: CHILD PID: 30251, PPID: 30250: RIP. Time of death: 0 sec 656 nano. Was fun while it lasted.
+./user: CHILD PID: 31595, PPID: 31594: RIP. Time of death: 0 sec 13360000 nano. Was fun while it lasted.
