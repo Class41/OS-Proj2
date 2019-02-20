@@ -11,9 +11,33 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 {
 	key_t shmkey = ftok("shmshare", 99656);
 
+	if (shmkey == -1) //check if the input file exists
+	{
+			printf("\n%s: ", filename);
+			fflush(stdout);
+			perror("Error: Ftok failed");
+			return;
+	}
+
 	int ipcid = shmget(shmkey, sizeof(Shared), 0666|IPC_CREAT);
 
+	if (ipcid == -1) //check if the input file exists
+	{
+			printf("\n%s: ", filename);
+			fflush(stdout);
+			perror("Error: failed to get shared memory");
+			return;
+	}
+	
 	Shared* data = (Shared*)shmat(shmkey, NULL, 0);
+
+	if (!data) //check if the input file exists
+	{
+			printf("\n%s: ", filename);
+			fflush(stdout);
+			perror("Error: Failed to attached to shared memory");
+			return;
+	}
 	
 	data->seconds = 4;
 
