@@ -8,8 +8,8 @@
 int main()
 {
 	int optionItem;
-	int childMax;
-	int childConcurMax;
+	int childMax = 4;
+	int childConcurMax = 2;
 	
 	char* inputName = malloc(50 * sizeof(char) + 1); //store filenames
 	char* outputName = malloc(50 * sizeof(char) + 1);
@@ -24,6 +24,8 @@ int main()
 					printf("\t%s Help Menu\n\
 		\t-h : show help dialog \n\
 		\t-i [filename] : input filename. default: input.dat\n\
+		\t-n [count] : max children to be created. default: 4\n\
+		\t-s [count] : max concurrent children to be run. default: 2\n\
 		\t-o [filename] : output filename. default: output.dat\n", argv[0]);
 					return;
 			case 'i': //change input
@@ -35,11 +37,11 @@ int main()
 					printf("\n%s: Info: set output file to: %s", argv[0], optarg);
 					break;
 			case 's': //max child at once
-					childConcurMax = optarg;
+					childConcurMax = atoi(optarg);
 					printf("\n%s: Info: set max concurrent children to: %s", argv[0], optarg);
 					break;
 			case 'n': //total # of children
-					childMax = optarg;
+					childMax = atoi(optarg);
 					printf("\n%s: Info: set max children to: %s", argv[0], optarg);
 					break;
 			case '?': //an error has occoured reading arguments
@@ -48,7 +50,7 @@ int main()
 			}
 	}
 
-	printf("\n%s: Info: input file: %s, output file: %s", argv[0], inputName, outputName);
+	printf("\n%s: Info: input file: %s, output file: %s, max total: %i, max concurrent: %i", argv[0], inputName, outputName, childMax, childConcurMax);
 
 	FILE* input = fopen(inputName, "r"); //open input/output files specified
 	FILE* output = fopen(outputName, "wr");
