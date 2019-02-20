@@ -9,7 +9,7 @@
 
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, FILE* output)
 {
-	key_t shmkey = ftok("shmshare", 99656);
+	key_t shmkey = ftok("shmshare", 695);
 
 	if (shmkey == -1) //check if the input file exists
 	{
@@ -19,7 +19,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			return;
 	}
 
-	int ipcid = shmget(shmkey, sizeof(Shared), 0666|IPC_CREAT);
+	int ipcid = shmget(shmkey, sizeof(Shared), 0600|IPC_CREAT);
 
 	if (ipcid == -1) //check if the input file exists
 	{
@@ -29,13 +29,13 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			return;
 	}
 	
-	Shared* data = (Shared*)shmat(shmkey, NULL, 0);
+	Shared* data = (Shared*)shmat(shmkey, (void*)0, 0);
 
-	if (!data) //check if the input file exists
+	if (data == (void*)-1) //check if the input file exists
 	{
 			printf("\n%s: ", filename);
 			fflush(stdout);
-			perror("Error: Failed to attached to shared memory");
+			perror("Error: Failed to attach to shared memory");
 			return;
 	}
 	
