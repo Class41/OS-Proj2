@@ -138,18 +138,25 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 				remainingExecs--;
 				cPids[i] = fork();
 
-				if (cPids[i] == -1)
+				if (cPids[i] < 0)
 				{
 					printf("\n%s: ", filename);
 					fflush(stdout);
 					perror("Error: Failed to fork");
 					return;
 				}
+				else if (cPids[i] == 0) //if child
+				{
+				        DoFork(100000, output);
+				}
 			}
 
 				if (cPids[i] > 0) //TODO: parent
 				{
-					waitpid(cPids[i], &status, WNOHANG);
+					if(childMax - exitcount > 1)
+						waitpid(cPids[i], &status, WNOHANG);
+					else
+						waitpid(cPids[i], &status, 0);
 				
 					if (WIFEXITED(status))
 					{
@@ -160,12 +167,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 						}
 					}
 				}
-				else //TODO: child
-				{
-					DoFork(100000, output);
-				}
 		}
-		printf("%i exit count    %i child max    %i time\n", exitcount, childMax, time(NULL));
 	} 
 
 	printf("((REMAINING: %i)))", remainingExecs);
