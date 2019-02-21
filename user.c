@@ -67,6 +67,6 @@ int main(int argc, char** argv)
 	
 	shmdt(data);
 	printf("%s: PID: %i EXIT\n", filename, getpid());
-	exit(1337);	
+	exit(21);	
 	return 0;
 }

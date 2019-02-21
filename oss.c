@@ -131,37 +131,26 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 					perror("Error: Failed to fork");
 					return;
 				}
-				else if (cPids[i] > 0) //TODO: parent
-				{
-					printf("%s: PARENT: PID: %i, CREATING PID: %i\n", filename, getpid(), cPids[i]);
-					fflush(stdout);
+			}
 
-					waitpid(cPids[i], &status, WNOHANG|WUNTRACED
-					#ifdef WCONTINUED
-					| WCONTINUED
-					#endif
-					);
-					
-					//PROBLEM HERE//	
+				if (cPids[i] > 0) //TODO: parent
+				{
+					waitpid(cPids[i], &status, WNOHANG);
+				
 					if (WIFEXITED(status))
 					{
 						int exi = WEXITSTATUS(status);
-						printf("%s: CHILD: %i EXITED WITH: %i\n", filename, cPids[i], exi);
-						if(WEXITSTATUS(status) == 1337)
+						printf("%i", exi);
+						if(WEXITSTATUS(status) == 21)
 						{
 							cPids[i] = 0;
 						}
-					}
-					else
-					{
-						printf("%s PARENT: Child exited with no code...\n", filename);
 					}
 				}
 				else //TODO: child
 				{
 					DoFork(100000, output);
 				}
-			}
 		}
 
 		AddTime(&(data->seconds), &(data->nanoseconds), 20000);

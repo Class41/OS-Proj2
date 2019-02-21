@@ -1,7 +1,7 @@
 ***Begin Of File***
 
-./oss: PARENT: CLOCK: Seconds: 0 ns: 20000
-./user: CHILD PID: 8880, PPID: 1: RIP. Time of death: 0 sec 0 nano. Was fun while it lasted.
-./user: CHILD PID: 8879, PPID: 1: RIP. Time of death: 0 sec 0 nano. Was fun while it lasted.
-./user: CHILD PID: 8882, PPID: 1: RIP. Time of death: 0 sec 0 nano. Was fun while it lasted.
-./user: CHILD PID: 8881, PPID: 1: RIP. Time of death: 0 sec 0 nano. Was fun while it lasted.
+./user: CHILD PID: 10548, PPID: 10547: RIP. Time of death: 0 sec 5300000 nano. Was fun while it lasted.
+./user: CHILD PID: 10549, PPID: 10547: RIP. Time of death: 0 sec 6000000 nano. Was fun while it lasted.
+./oss: PARENT: CLOCK: Seconds: 0 ns: 6280000
+./user: CHILD PID: 10550, PPID: 1: RIP. Time of death: 0 sec 0 nano. Was fun while it lasted.
+./user: CHILD PID: 10551, PPID: 1: RIP. Time of death: 0 sec 0 nano. Was fun while it lasted.
