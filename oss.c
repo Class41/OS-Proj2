@@ -128,7 +128,9 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	int remainingExecs = childMax;
 	int exitcount = 0;
 
-	do {
+	while (time(NULL) < terminator && exitcount < childMax) {
+		AddTime(&(data->seconds), &(data->nanoseconds), 20000);
+		
 		for (i = 0; i < childConcurMax; i++)
 		{
 			if (cPids[i] <= 0 && remainingExecs > 0)
@@ -164,8 +166,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 				}
 		}
 		printf("%i exit count    %i child max    %i time\n", exitcount, childMax, time(NULL));
-		AddTime(&(data->seconds), &(data->nanoseconds), 20000);
-	} while (time(NULL) < terminator && exitcount < childMax);
+	} 
 
 	printf("((REMAINING: %i)))", remainingExecs);
 
