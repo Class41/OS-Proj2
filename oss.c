@@ -69,6 +69,17 @@ void DoFork(int value, char* output)
 	exit(0);
 }
 
+int checkPIDs(int* pids, int count)
+{
+	int i;
+	for(i = 0; i < count; i++)
+	{
+		if(pids[i] > 0)
+			return 1;
+	}
+	return 0;
+}
+
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, char* output)
 {
 	filen = filename;
@@ -115,6 +126,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	signal(SIGINT, handler);
 	int i;
 	int remainingExecs = childMax;
+	int exitcount = 0;
 
 	do {
 		for (i = 0; i < childConcurMax; i++)
@@ -139,11 +151,10 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 				
 					if (WIFEXITED(status))
 					{
-						int exi = WEXITSTATUS(status);
-						printf("%i", exi);
 						if(WEXITSTATUS(status) == 21)
 						{
 							cPids[i] = 0;
+							exitcount++;
 						}
 					}
 				}
@@ -154,7 +165,9 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		}
 
 		AddTime(&(data->seconds), &(data->nanoseconds), 20000);
-	} while (time(NULL) < terminator && remainingExecs > 0);
+	} while (time(NULL) < terminator && exitcount < childMax);
+
+	printf("((REMAINING: %i)))", remainingExecs);
 
 	FILE* out = fopen(output, "a");
 	fprintf(out, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);
