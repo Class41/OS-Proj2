@@ -136,17 +136,24 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 					printf("%s: PARENT: PID: %i, CREATING PID: %i\n", filename, getpid(), cPids[i]);
 					fflush(stdout);
 
-					waitpid(cPids[i], &status, WNOHANG);
-						
+					waitpid(cPids[i], &status, WNOHANG|WUNTRACED
+					#ifdef WCONTINUED
+					| WCONTINUED
+					#endif
+					);
+	
 					if (WIFEXITED(status))
 					{
 						int exi = WEXITSTATUS(status);
 						printf("%s: CHILD: %i EXITED WITH: %i\n", filename, cPids[i], exi);
 						if(WEXITSTATUS(status) == 1337)
 						{
-							printf("%s: PARENT: GOT SIGNAL FROM %i", filename, cPids[i]);
 							cPids[i] = 0;
 						}
+					}
+					else
+					{
+						printf("%s PARENT: Child exited with no code...\n", filename);
 					}
 				}
 				else //TODO: child
@@ -188,7 +195,7 @@ int main(int argc, char** argv)
 		\t-h : show help dialog \n\
 		\t-i [filename] : input filename. default: input.dat\n\
 		\t-n [count] : max children to be created. default: 4\n\
-		\t-s [count] : max concurrent children to be run. default: 2\n\
+		\t-s [count] : max concurrent children to be run. default: 2, < 20\n\
 		\t-o [filename] : output filename. default: output.dat\n", argv[0]);
 			return;
 		case 'i': //change input
@@ -201,6 +208,10 @@ int main(int argc, char** argv)
 			break;
 		case 's': //max child at once
 			childConcurMax = atoi(optarg);
+			
+			if(childConcurMax > 20)
+				childConcurMax = 20;
+
 			printf("\n%s: Info: set max concurrent children to: %s", argv[0], optarg);
 			break;
 		case 'n': //total # of children
