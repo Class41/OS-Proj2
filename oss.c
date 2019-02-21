@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include <sys/ipc.h> 
 #include <sys/shm.h> 
+#include <errno.h>
 #include "shared.h"
 #include <signal.h>
 
@@ -14,6 +15,29 @@ int ipcid;
 Shared* data;
 char* filen;
 char* outfilename;
+
+
+void timerhandler(int sig)
+{
+	kill(getpid(), SIGTERM);
+}
+
+int setupinterrupt()
+{
+	struct sigaction act;
+	act.sa_handler = timerhandler;
+	act.sa_flags = 0;
+	return (sigemptyset(&act.sa_mask) || sigaction(SIGPROF, &act, NULL));
+}
+
+int setuptimer()
+{
+	struct itimerval value;
+	value.it_interval.tv_sec = 2;
+	value.it_interval.tv_usec = 0;
+	value.it_value = value.it_interval;
+	return (setitimer(ITIMER_PROF, &value, NULL));
+}
 
 void handler(int signal)
 {
@@ -172,6 +196,12 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 	printf("((REMAINING: %i)))", remainingExecs);
 
+	while(checkPIDs(cPids, childConcurMax))
+	{
+		wait(NULL);
+	}
+		
+	
 	FILE* out = fopen(output, "a");
 	fprintf(out, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);
 	fclose(out);
@@ -183,6 +213,17 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 int main(int argc, char** argv)
 {
+	if(setupinterrupt() == -1)
+	{
+		perror("Failed to setup handler for SIGPROF");
+		return 1;
+	}
+	if(setuptimer() == -1)
+	{
+		perror("Failed to setup ITIMER_PROF interval timer");
+		return 1;
+	}
+
 	int optionItem;
 	int childMax = 4;
 	int childConcurMax = 2;
