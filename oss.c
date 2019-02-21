@@ -140,7 +140,9 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 						
 					if (WIFEXITED(status))
 					{
-						if(WEXITSTATUS(status) == 13370)
+						int exi = WEXITSTATUS(status);
+						printf("%s: CHILD: %i EXITED WITH: %i\n", filename, cPids[i], exi);
+						if(WEXITSTATUS(status) == 1337)
 						{
 							printf("%s: PARENT: GOT SIGNAL FROM %i", filename, cPids[i]);
 							cPids[i] = 0;

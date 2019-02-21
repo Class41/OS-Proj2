@@ -66,6 +66,6 @@ int main(int argc, char** argv)
 	fclose(output);
 	
 	shmdt(data);
-	exit(42);	
+	exit(1337);	
 	return 0;
 }
