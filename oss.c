@@ -163,7 +163,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 					DoFork(100000, output);
 				}
 		}
-
+		printf("%i exit count    %i child max    %i time\n", exitcount, childMax, time(NULL));
 		AddTime(&(data->seconds), &(data->nanoseconds), 20000);
 	} while (time(NULL) < terminator && exitcount < childMax);
 

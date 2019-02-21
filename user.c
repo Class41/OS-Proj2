@@ -63,10 +63,13 @@ int main(int argc, char** argv)
 	
 	FILE* output = fopen(argv[2], "a");
 	fprintf(output, "%s: CHILD PID: %i, PPID: %i: RIP. Time of death: %i sec %i nano. Was fun while it lasted.\n", filename, getpid(), getppid(), data->seconds, data->nanoseconds);
+	fflush(output);
 	fclose(output);
 	
 	shmdt(data);
 	printf("%s: PID: %i EXIT\n", filename, getpid());
+	fflush(stdout);
+
 	exit(21);	
 	return 0;
 }
