@@ -8,6 +8,7 @@
 #include <errno.h>
 #include "shared.h"
 #include <signal.h>
+#include <sys/time.h>
 
 int* cPids;
 int numpids;
@@ -19,7 +20,7 @@ char* outfilename;
 
 void timerhandler(int sig)
 {
-	kill(getpid(), SIGTERM);
+	handler(sig);
 }
 
 int setupinterrupt()
@@ -144,7 +145,6 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 	cPids = calloc(childConcurMax, sizeof(int));
 
-	time_t terminator = time(NULL) + 2;
 	int status;
 	signal(SIGQUIT, handler);
 	signal(SIGINT, handler);
@@ -152,7 +152,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	int remainingExecs = childMax;
 	int exitcount = 0;
 
-	while (time(NULL) < terminator && exitcount < childMax) {
+	while (exitcount < childMax) {
 		AddTime(&(data->seconds), &(data->nanoseconds), 20000);
 		
 		for (i = 0; i < childConcurMax; i++)
@@ -194,13 +194,12 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		}
 	} 
 
-	printf("((REMAINING: %i)))", remainingExecs);
+	printf("((REMAINING: %i)))\n", remainingExecs);
 
 	while(checkPIDs(cPids, childConcurMax))
 	{
 		wait(NULL);
-	}
-		
+	}		
 	
 	FILE* out = fopen(output, "a");
 	fprintf(out, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);
