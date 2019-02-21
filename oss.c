@@ -141,7 +141,8 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 					| WCONTINUED
 					#endif
 					);
-	
+					
+					//PROBLEM HERE//	
 					if (WIFEXITED(status))
 					{
 						int exi = WEXITSTATUS(status);
@@ -211,6 +212,8 @@ int main(int argc, char** argv)
 			
 			if(childConcurMax > 20)
 				childConcurMax = 20;
+			if(childConcurMax > childMax)
+				childConcurMax = childMax;
 
 			printf("\n%s: Info: set max concurrent children to: %s", argv[0], optarg);
 			break;
