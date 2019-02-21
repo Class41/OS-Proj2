@@ -18,6 +18,30 @@ char* filen;
 char* outfilename;
 
 
+typedef struct {
+	int seconds;
+	int nanoseconds;
+	int arg;
+} Row;
+
+Row* rows[50];
+int rowcount;
+
+
+int parsefile(FILE* in)
+{
+	int timerinc;
+	fscanf(in, "%i", &timerinc);
+	fgetc(in);
+
+	char line[1000];
+
+	fgets(line, 1000, in);
+	printf("%s", line);
+	
+}
+
+
 void timerhandler(int sig)
 {
 	handler(sig);
@@ -289,6 +313,7 @@ int main(int argc, char** argv)
 		return;
 	}
 
+	parsefile(input);
 	DoSharedWork(argv[0], childMax, childConcurMax, input, outputName);
 
 	return 0;
