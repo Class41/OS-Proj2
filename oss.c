@@ -121,8 +121,8 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		{
 			if (cPids[i] <= 0 && remainingExecs > 0)
 			{
-				cPids[i] = fork();
 				remainingExecs--;
+				cPids[i] = fork();
 
 				if (cPids[i] == -1)
 				{
@@ -131,13 +131,17 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 					perror("Error: Failed to fork");
 					return;
 				}
-				else if (pid > 0) //TODO: parent
+				else if (cPids[i] > 0) //TODO: parent
 				{
-					pid_t exitc = waitpid(pid, &status, WNOHANG);
+					printf("%s: PARENT: PID: %i, CREATING PID: %i\n", filename, getpid(), cPids[i]);
+					fflush(stdout);
 
+					pid_t exitc = waitpid(cPids[i], &status, WNOHANG);
+				
 					if (exitc > 0)
 					{
-						if (WIFEXITED(status)) {
+						if(WIFEXITED(exitc))
+						{
 							cPids[i] = 0;
 						}
 					}
@@ -157,7 +161,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		}
 
 		AddTime(&(data->seconds), &(data->nanoseconds), 20000);
-	} while (time(NULL) < terminator);
+	} while (time(NULL) < terminator && remainingExecs > 0);
 
 	FILE* out = fopen(output, "a");
 	fprintf(out, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);

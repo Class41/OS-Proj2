@@ -67,6 +67,5 @@ int main(int argc, char** argv)
 	
 	shmdt(data);
 	exit(0);	
-
 	return 0;
 }
