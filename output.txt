@@ -1,5 +1,5 @@
 ***Begin Of File***
 
-./user: CHILD PID: 4413, PPID: 4412: RIP. Time of death: 0 sec 917020000 nano. Was fun while it lasted.
-./user: CHILD PID: 4414, PPID: 4412: RIP. Time of death: 1 sec 75420000 nano. Was fun while it lasted.
-./oss: PARENT: CLOCK: Seconds: 2157 ns: 973980000
+./user: CHILD PID: 5231, PPID: 5230: RIP. Time of death: 0 sec 755300000 nano. Was fun while it lasted.
+./user: CHILD PID: 5232, PPID: 5230: RIP. Time of death: 0 sec 875660000 nano. Was fun while it lasted.
+./oss: PARENT: CLOCK: Seconds: 2314 ns: 258220000

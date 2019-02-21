@@ -136,20 +136,14 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 					printf("%s: PARENT: PID: %i, CREATING PID: %i\n", filename, getpid(), cPids[i]);
 					fflush(stdout);
 
-					pid_t exitc = waitpid(cPids[i], &status, WNOHANG);
-				
-					if (exitc > 0)
+					waitpid(cPids[i], &status, WNOHANG);
+						
+					if (WIFEXITED(status))
 					{
-						if(WIFEXITED(exitc))
+						if(WEXITSTATUS(status) == 13370)
 						{
+							printf("%s: PARENT: GOT SIGNAL FROM %i", filename, cPids[i]);
 							cPids[i] = 0;
-						}
-					}
-					else
-					{
-						if (exitc < 0)
-						{
-							printf("%s: Child no longer exists: %i", filename, cPids[i]);
 						}
 					}
 				}
