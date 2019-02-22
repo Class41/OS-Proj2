@@ -18,13 +18,13 @@ char* filen;
 char* outfilename;
 
 
-typedef struct {
+struct Row {
 	int seconds;
 	int nanoseconds;
 	int arg;
-} Row;
+};
 
-Row* rows[50];
+struct Row rows[50];
 int rowcount;
 
 
@@ -46,8 +46,7 @@ int parsefile(FILE* in)
 			return 1;
 		}
 
-		fgets(line, 1000, in);
-		printf("%s", line);
+		char* success = fgets(line, 1000, in);
 
 		char* value = strtok(line, " "); // split numbers by spaces
 
@@ -59,25 +58,32 @@ int parsefile(FILE* in)
 				switch (fieldcount)
 				{
 				case 0:
-					rows[linecount]->seconds = atoi(value);
+					rows[linecount].seconds = atoi(value);
 					break;
 				case 1:
-					rows[linecount]->nanoseconds = atoi(value);
+					rows[linecount].nanoseconds = atoi(value);
 					break;
 				case 2:
-					rows[linecount]->arg = atoi(value);
+					rows[linecount].arg = atoi(value);
 					break;
 				}
 			}
 			else
 			{
-				printf("\n%s: Error: Input Line Data and Count Mismatch.\n", filen);
+				printf("\n%s: Error: Expected 3 values on line %i, got more.\n", filen, linecount + 1);
 				exit(1); //exit with error
 			}
 
 			fieldcount++;
 			value = strtok(NULL, " "); //get next token
 		}
+		
+		if(!(rows[linecount].seconds && rows[linecount].nanoseconds && rows[linecount].arg) && success != NULL)
+		{
+			printf("\n%s: Error: Expected 3 values on line %i got less.\n", filen, linecount + 1);
+			exit(1);
+		}	
+	
 	}
 
 }
