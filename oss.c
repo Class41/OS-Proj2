@@ -22,6 +22,7 @@ struct Row {
 	int seconds;
 	int nanoseconds;
 	int arg;
+	int flag;
 };
 
 struct Row rows[50];
@@ -77,9 +78,9 @@ int parsefile(FILE* in)
 			value = strtok(NULL, " "); //get next token
 		}
 		
-		/*if(!(rows[linecount].seconds && rows[linecount].nanoseconds && rows[linecount].arg) && success != NULL)
+		/*if(!(rows[rowcount].seconds && rows[rowcount].nanoseconds && rows[rowcount].arg) && success != NULL)
 		{
-			printf("\n%s: Error: Expected 3 values on line %i got less.\n", filen, linecount + 1);
+			printf("\n%s: Error: Expected 3 values on line %i got less.\n", filen, rowcount + 1);
 			exit(1);
 		}*/	
 	
@@ -98,7 +99,7 @@ int userready(int* tracker)
 	int x;
 	for(x = 0; x < rowcount; x++)
 	{
-		if(rows[x].seconds < data->seconds && rows[x].nanoseconds < data->nanoseconds)
+		if(rows[x].seconds < data->seconds && rows[x].nanoseconds < data->nanoseconds && rows[x].flag != 1337)
 		{
 			*tracker = x;
 			return 1;
@@ -268,6 +269,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 			if (cPids[i] > 0) //TODO: parent
 			{
+				rows[usertracker].flag = 1337;
 				if (childMax - exitcount > 1)
 					waitpid(cPids[i], &status, WNOHANG);
 				else
