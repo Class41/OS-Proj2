@@ -198,7 +198,6 @@ int checkPIDs(int* pids, int count)
 
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, char* output)
 {
-	filen = filename;
 	outfilename = output;
 
 	key_t shmkey = ftok("shmshare", 695);
@@ -316,6 +315,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
+	filen = argv[0];
 	int optionItem;
 	int childMax = 4;
 	int childConcurMax = 2;
