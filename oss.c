@@ -36,9 +36,50 @@ int parsefile(FILE* in)
 
 	char line[1000];
 
-	fgets(line, 1000, in);
-	printf("%s", line);
-	
+	int linecount = 0;
+	while (!feof(in))
+	{
+		linecount++;
+		if (linecount >= 50)
+		{
+			printf("%s: PARENT: TOO MANY LINES IN FILE. MAX 50", filen);
+			return 1;
+		}
+
+		fgets(line, 1000, in);
+		printf("%s", line);
+
+		char* value = strtok(line, " "); // split numbers by spaces
+
+		int fieldcount = 0;
+		while (value != NULL) //check if token exists
+		{
+			if (fieldcount <= 2) //make sure the amount provided matches actual
+			{
+				switch (fieldcount)
+				{
+				case 0:
+					rows[linecount]->seconds = atoi(value);
+					break;
+				case 1:
+					rows[linecount]->nanoseconds = atoi(value);
+					break;
+				case 2:
+					rows[linecount]->arg = atoi(value);
+					break;
+				}
+			}
+			else
+			{
+				printf("\n%s: Error: Input Line Data and Count Mismatch.\n", filen);
+				exit(1); //exit with error
+			}
+
+			fieldcount++;
+			value = strtok(NULL, " "); //get next token
+		}
+	}
+
 }
 
 
@@ -121,9 +162,9 @@ void DoFork(int value, char* output)
 int checkPIDs(int* pids, int count)
 {
 	int i;
-	for(i = 0; i < count; i++)
+	for (i = 0; i < count; i++)
 	{
-		if(pids[i] > 0)
+		if (pids[i] > 0)
 			return 1;
 	}
 	return 0;
@@ -178,7 +219,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 	while (exitcount < childMax) {
 		AddTime(&(data->seconds), &(data->nanoseconds), 20000);
-		
+
 		for (i = 0; i < childConcurMax; i++)
 		{
 			if (cPids[i] <= 0 && remainingExecs > 0)
@@ -195,36 +236,36 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 				}
 				else if (cPids[i] == 0) //if child
 				{
-				        DoFork(100000, output);
+					DoFork(100000, output);
 				}
 			}
 
-				if (cPids[i] > 0) //TODO: parent
+			if (cPids[i] > 0) //TODO: parent
+			{
+				if (childMax - exitcount > 1)
+					waitpid(cPids[i], &status, WNOHANG);
+				else
+					waitpid(cPids[i], &status, 0);
+
+				if (WIFEXITED(status))
 				{
-					if(childMax - exitcount > 1)
-						waitpid(cPids[i], &status, WNOHANG);
-					else
-						waitpid(cPids[i], &status, 0);
-				
-					if (WIFEXITED(status))
+					if (WEXITSTATUS(status) == 21)
 					{
-						if(WEXITSTATUS(status) == 21)
-						{
-							cPids[i] = 0;
-							exitcount++;
-						}
+						cPids[i] = 0;
+						exitcount++;
 					}
 				}
+			}
 		}
-	} 
+	}
 
 	printf("((REMAINING: %i)))\n", remainingExecs);
 
-	while(checkPIDs(cPids, childConcurMax))
+	while (checkPIDs(cPids, childConcurMax))
 	{
 		wait(NULL);
-	}		
-	
+	}
+
 	FILE* out = fopen(output, "a");
 	fprintf(out, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);
 	fclose(out);
@@ -236,12 +277,12 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 int main(int argc, char** argv)
 {
-	if(setupinterrupt() == -1)
+	if (setupinterrupt() == -1)
 	{
 		perror("Failed to setup handler for SIGPROF");
 		return 1;
 	}
-	if(setuptimer() == -1)
+	if (setuptimer() == -1)
 	{
 		perror("Failed to setup ITIMER_PROF interval timer");
 		return 1;
@@ -278,10 +319,10 @@ int main(int argc, char** argv)
 			break;
 		case 's': //max child at once
 			childConcurMax = atoi(optarg);
-			
-			if(childConcurMax > 20)
+
+			if (childConcurMax > 20)
 				childConcurMax = 20;
-			if(childConcurMax > childMax)
+			if (childConcurMax > childMax)
 				childConcurMax = childMax;
 
 			printf("\n%s: Info: set max concurrent children to: %s", argv[0], optarg);
