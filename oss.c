@@ -25,22 +25,21 @@ struct Row {
 };
 
 struct Row rows[50];
-int rowcount;
-
+int rowcount = -1;
+int timerinc;
 
 int parsefile(FILE* in)
 {
-	int timerinc;
 	fscanf(in, "%i", &timerinc);
 	fgetc(in);
 
 	char line[1000];
 
-	int linecount = 0;
+	printf("%s: PARENT: BEGIN FILE PARSE\n", filen);
 	while (!feof(in))
 	{
-		linecount++;
-		if (linecount >= 50)
+		rowcount++;
+		if (rowcount > 50)
 		{
 			printf("%s: PARENT: TOO MANY LINES IN FILE. MAX 50", filen);
 			return 1;
@@ -58,19 +57,19 @@ int parsefile(FILE* in)
 				switch (fieldcount)
 				{
 				case 0:
-					rows[linecount].seconds = atoi(value);
+					rows[rowcount].seconds = atoi(value);
 					break;
 				case 1:
-					rows[linecount].nanoseconds = atoi(value);
+					rows[rowcount].nanoseconds = atoi(value);
 					break;
 				case 2:
-					rows[linecount].arg = atoi(value);
+					rows[rowcount].arg = atoi(value);
 					break;
 				}
 			}
 			else
 			{
-				printf("\n%s: Error: Expected 3 values on line %i, got more.\n", filen, linecount + 1);
+				printf("\n%s: Error: Expected 3 values on line %i, got more.\n", filen, rowcount + 1);
 				exit(1); //exit with error
 			}
 
@@ -78,14 +77,34 @@ int parsefile(FILE* in)
 			value = strtok(NULL, " "); //get next token
 		}
 		
-		if(!(rows[linecount].seconds && rows[linecount].nanoseconds && rows[linecount].arg) && success != NULL)
+		/*if(!(rows[linecount].seconds && rows[linecount].nanoseconds && rows[linecount].arg) && success != NULL)
 		{
 			printf("\n%s: Error: Expected 3 values on line %i got less.\n", filen, linecount + 1);
 			exit(1);
-		}	
+		}*/	
 	
 	}
+	
+	int i;
+	for(i = 0; i < rowcount; i++)
+	{
+	   printf("%s: PARENT: PARSED: sec: %i, nano %i, offset %i\n", filen, rows[i].seconds, rows[i].nanoseconds, rows[i].arg);
+	   fflush(stdout);
+	}
+}
 
+int userready(int* tracker)
+{
+	int x;
+	for(x = 0; x < rowcount; x++)
+	{
+		if(rows[x].seconds < data->seconds && rows[x].nanoseconds < data->nanoseconds)
+		{
+			*tracker = x;
+			return 1;
+		}
+	}
+	return 0;
 }
 
 
@@ -224,11 +243,12 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	int exitcount = 0;
 
 	while (exitcount < childMax) {
-		AddTime(&(data->seconds), &(data->nanoseconds), 20000);
+		AddTime(&(data->seconds), &(data->nanoseconds), timerinc);
 
 		for (i = 0; i < childConcurMax; i++)
 		{
-			if (cPids[i] <= 0 && remainingExecs > 0)
+			int usertracker = -1;
+			if (cPids[i] <= 0 && remainingExecs > 0 && userready(&usertracker) > 0)
 			{
 				remainingExecs--;
 				cPids[i] = fork();
@@ -242,7 +262,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 				}
 				else if (cPids[i] == 0) //if child
 				{
-					DoFork(100000, output);
+					DoFork(rows[usertracker].arg, output);
 				}
 			}
 
