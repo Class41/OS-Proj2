@@ -3,6 +3,7 @@
 typedef struct {
 	int seconds;
 	int nanoseconds;
+	int fit;
 } Shared;
 
 typedef struct {

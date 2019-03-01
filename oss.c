@@ -240,14 +240,48 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	signal(SIGINT, handler);
 	int i;
 	int remainingExecs = childMax;
+	int activeExecs = 0;
 	int exitcount = 0;
 	FILE* o = fopen(output, "a");
 	int finalChildPID;
 
 	while (1) {
 		AddTime(&(data->seconds), &(data->nanoseconds), timerinc);
+		
+		pid_t pid;
+		int usertracker = -1;
+		if(activeExecs < childConcurMax && remainingExecs > 0 && userready(&usertracker) > 0)
+		{	
+			pid = fork();
 
-		for (i = 0; i < childConcurMax; i++)
+			if(pid < 0)
+			{
+				handler(1);
+			}
+				
+			remainingExecs--;
+			if(pid == 0)
+			{
+				DoFork(rows[usertracker].arg, output);
+			}
+			activeExecs++;
+		}
+
+		if((pid = waitpid((pid_t)-1, &status, WNOHANG)) > 0)
+		{
+			if(WIFEXITED(status))
+			{
+				if(WEXITSTATUS(status) == 21)
+				{
+					exitcount++;
+					activeExecs--;
+					printf("%i ended at %i %i \n", (int)pid, data->seconds, data->nanoseconds);
+				}
+			}
+		}
+		
+	
+		/*for (i = 0; i < childConcurMax; i++)
 		{
 			int usertracker = -1;
 			if (cPids[i] == 0 && remainingExecs > 0 && userready(&usertracker) > 0)
@@ -289,20 +323,24 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 					}
 				}
 			}
-		}
+		}*/
 
-		int sent = 0;
+		/*int sent = 0;
 		int n;
 		for(n = 0; n < childConcurMax; n++)
 		{
 		   if(cPids[i] > 0)
 		   	 sent = 1;
-		}
+		}*/
 
-		if(sent == 0 && childMax == exitcount && remainingExecs == 0)
+		if(exitcount == childMax && remainingExecs == 0)
+			break;		
+
+		/*if(sent == 0 && childMax == exitcount && remainingExecs == 0)
+ *
 		{
 			break;
-		}
+		}*/
 	}
 
 	printf("((REMAINING: %i)))\n", remainingExecs);
