@@ -307,6 +307,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 	printf("((REMAINING: %i)))\n", remainingExecs);
 
+	sleep(1);
 	kill(finalChildPID, SIGKILL);
 
 	fprintf(o, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);
