@@ -241,6 +241,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	int i;
 	int remainingExecs = childMax;
 	int exitcount = 0;
+	FILE* o = fopen(output, "a");
 
 	while (exitcount < childMax) {
 		AddTime(&(data->seconds), &(data->nanoseconds), timerinc);
@@ -278,6 +279,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 				{
 					if (WEXITSTATUS(status) == 21)
 					{
+						fprintf(o, "%s: CHILD PID: %i: RIP. fun while it lasted: %i sec %i nano.\n", filen, cPids[i], data->seconds, data->nanoseconds);						
 						cPids[i] = 0;
 						exitcount++;
 					}
@@ -293,9 +295,9 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		wait(NULL);
 	}
 
-	FILE* out = fopen(output, "a");
-	fprintf(out, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);
-	fclose(out);
+	fprintf(o, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);
+	fflush(o);
+	fclose(o);
 
 	shmdt(data);
 	shmctl(ipcid, IPC_RMID, NULL);

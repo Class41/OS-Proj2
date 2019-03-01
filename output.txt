@@ -1,7 +1,7 @@
 ***Begin Of File***
 
-./user: CHILD PID: 29733, PPID: 29732: RIP. Time of death: 1 sec 599000 nano. Was fun while it lasted.
-./user: CHILD PID: 29734, PPID: 29732: RIP. Time of death: 1 sec 2811000 nano. Was fun while it lasted.
-./user: CHILD PID: 29735, PPID: 29732: RIP. Time of death: 1 sec 5737000 nano. Was fun while it lasted.
-./user: CHILD PID: 29736, PPID: 29732: RIP. Time of death: 2 sec 30500 nano. Was fun while it lasted.
-./oss: PARENT: CLOCK: Seconds: 2 ns: 30500
+./oss: CHILD PID: 10800: RIP. fun while it lasted: 1 sec 143800 nano.
+./oss: CHILD PID: 10801: RIP. fun while it lasted: 1 sec 563700 nano.
+./oss: CHILD PID: 10802: RIP. fun while it lasted: 1 sec 2758400 nano.
+./oss: CHILD PID: 10804: RIP. fun while it lasted: 2 sec 30100 nano.
+./oss: PARENT: CLOCK: Seconds: 2 ns: 30100

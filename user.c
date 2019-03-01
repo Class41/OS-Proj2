@@ -54,17 +54,14 @@ int main(int argc, char** argv)
 			return;
 	}
 
-	Target targtime = AddTime(data->seconds, data->nanoseconds, atoi(argv[1]));
-	
-	printf("%s: Argument got: %i, SHARED(%i %i), added seconds: %i, added nanoseconds: %i\n", argv[0], atoi(argv[1]), data->seconds, data->nanoseconds, targtime.seconds, targtime.nanoseconds);
+	int sharedTimeCurrentSec = data->seconds, sharedTimeCurrentNs = data->nanoseconds;
+	Target targtime = AddTime(sharedTimeCurrentSec, sharedTimeCurrentNs, atoi(argv[1]));
+
+	//printf("DEBUGGING: %i\n", atoi(argv[1]));	
+	printf("%s: Argument got: %i, SHARED(%i %i), added seconds: %i, added nanoseconds: %i\n", argv[0], atoi(argv[1]), sharedTimeCurrentSec, sharedTimeCurrentNs, targtime.seconds, targtime.nanoseconds);
 	fflush(stdout);
 
 	while(data->seconds < targtime.seconds && data->nanoseconds < targtime.nanoseconds);
-	
-	FILE* output = fopen(argv[2], "a");
-	fprintf(output, "%s: CHILD PID: %i, PPID: %i: RIP. Time of death: %i sec %i nano. Was fun while it lasted.\n", filename, getpid(), getppid(), data->seconds, data->nanoseconds);
-	fflush(output);
-	fclose(output);
 	
 	shmdt(data);
 	printf("%s: PID: %i EXIT\n", filename, getpid());
