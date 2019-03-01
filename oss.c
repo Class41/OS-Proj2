@@ -271,82 +271,22 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		{
 			if(WIFEXITED(status))
 			{
+				printf("\n%s: PARENT: EXIT: PID: %i, CODE: %i, SEC: %i, NANO %i", filen, pid, WEXITSTATUS(status), data->seconds, data->nanoseconds);
 				if(WEXITSTATUS(status) == 21)
 				{
 					exitcount++;
 					activeExecs--;
+					fprintf(o, "%s: CHILD PID: %i: RIP. fun while it lasted: %i sec %i nano.\n", filen, pid, data->seconds, data->nanoseconds);
 					printf("%i ended at %i %i \n", (int)pid, data->seconds, data->nanoseconds);
 				}
 			}
 		}
-		
-	
-		/*for (i = 0; i < childConcurMax; i++)
-		{
-			int usertracker = -1;
-			if (cPids[i] == 0 && remainingExecs > 0 && userready(&usertracker) > 0)
-			{
-				remainingExecs--;
-				cPids[i] = fork();
-
-				if (cPids[i] < 0)
-				{
-					printf("\n%s: ", filename);
-					fflush(stdout);
-					perror("Error: Failed to fork");
-					handler(1);
-				}
-				else if (cPids[i] == 0) //if child
-				{
-					DoFork(rows[usertracker].arg, output);
-				}
-			}
-
-			if (cPids[i] > 0) //TODO: parent
-			{
-				rows[usertracker].flag = 1337;
-				waitpid(cPids[i], &status, WNOHANG);
-
-				if (WIFEXITED(status))
-				{
-					printf("\n%s: PARENT: EXIT: PID: %i, CODE: %i, SEC: %i, NANO %i", filen, cPids[i], WEXITSTATUS(status), data->seconds, data->nanoseconds);
-					if (WEXITSTATUS(status) == 21)
-					{
-						fprintf(o, "%s: CHILD PID: %i: RIP. fun while it lasted: %i sec %i nano.\n", filen, cPids[i], data->seconds, data->nanoseconds);						            fflush(o);				
-						exitcount++;
-						
-						if(exitcount == childMax)
-							finalChildPID = cPids[i];
-
-						cPids[i] = 0;
-						printf(" Exit Count: %i\n", exitcount);
-					}
-				}
-			}
-		}*/
-
-		/*int sent = 0;
-		int n;
-		for(n = 0; n < childConcurMax; n++)
-		{
-		   if(cPids[i] > 0)
-		   	 sent = 1;
-		}*/
 
 		if(exitcount == childMax && remainingExecs == 0)
 			break;		
-
-		/*if(sent == 0 && childMax == exitcount && remainingExecs == 0)
- *
-		{
-			break;
-		}*/
 	}
 
 	printf("((REMAINING: %i)))\n", remainingExecs);
-
-	sleep(1);
-	kill(finalChildPID, SIGKILL);
 
 	fprintf(o, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);
 	fflush(o);
