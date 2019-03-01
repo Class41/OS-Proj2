@@ -77,29 +77,29 @@ int parsefile(FILE* in) //reads in input file and parses input
 			fieldcount++;
 			value = strtok(NULL, " "); //get next token
 		}
-		
+
 		/*if(!(rows[rowcount].seconds && rows[rowcount].nanoseconds && rows[rowcount].arg) && success != NULL)
 		{
 			printf("\n%s: Error: Expected 3 values on line %i got less.\n", filen, rowcount + 1);
 			exit(1);
-		}*/	
-	
+		}*/
+
 	}
-	
+
 	int i;
-	for(i = 0; i < rowcount; i++)
+	for (i = 0; i < rowcount; i++)
 	{
-	   printf("%s: PARENT: PARSED: sec: %i, nano %i, offset %i\n", filen, rows[i].seconds, rows[i].nanoseconds, rows[i].arg);
-	   fflush(stdout);
+		printf("%s: PARENT: PARSED: sec: %i, nano %i, offset %i\n", filen, rows[i].seconds, rows[i].nanoseconds, rows[i].arg);
+		fflush(stdout);
 	}
 }
 
 int userready(int* tracker) //loops through users and determines what users are ready to be launched
-{ 
+{
 	int x;
-	for(x = 0; x < rowcount; x++)
+	for (x = 0; x < rowcount; x++)
 	{
-		if(rows[x].seconds <= data->seconds && rows[x].nanoseconds <= data->nanoseconds && rows[x].flag != 1337)
+		if (rows[x].seconds <= data->seconds && rows[x].nanoseconds <= data->nanoseconds && rows[x].flag != 1337)
 		{
 			*tracker = x;
 			return 1;
@@ -199,7 +199,7 @@ int checkPIDs(int* pids, int count)
 void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, char* output)
 {
 	outfilename = output;
-
+	numpids = childMax;
 	key_t shmkey = ftok("shmshare", 695);
 
 	if (shmkey == -1) //check if the input file exists
@@ -233,7 +233,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	data->seconds = 0;
 	data->nanoseconds = 0;
 
-	cPids = calloc(childConcurMax, sizeof(int));
+	cPids = calloc(childMax, sizeof(int));
 
 	int status;
 	signal(SIGQUIT, handler);
@@ -242,37 +242,39 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	int remainingExecs = childMax;
 	int activeExecs = 0;
 	int exitcount = 0;
+	int cPidsPos = 0;
 	FILE* o = fopen(output, "a");
-	int finalChildPID;
 
 	while (1) {
 		AddTime(&(data->seconds), &(data->nanoseconds), timerinc);
-		
+
 		pid_t pid;
 		int usertracker = -1;
-		if(activeExecs < childConcurMax && remainingExecs > 0 && userready(&usertracker) > 0)
-		{	
+		if (activeExecs < childConcurMax && remainingExecs > 0 && userready(&usertracker) > 0)
+		{
 			pid = fork();
 
-			if(pid < 0)
+			if (pid < 0)
 			{
 				handler(1);
 			}
-				
+
 			remainingExecs--;
-			if(pid == 0)
+			if (pid == 0)
 			{
 				DoFork(rows[usertracker].arg, output);
 			}
+			cPids[cPidsPos] = pid;
+			cPidsPos++;
 			activeExecs++;
 		}
 
-		if((pid = waitpid((pid_t)-1, &status, WNOHANG)) > 0)
+		if ((pid = waitpid((pid_t)-1, &status, WNOHANG)) > 0)
 		{
-			if(WIFEXITED(status))
+			if (WIFEXITED(status))
 			{
 				printf("\n%s: PARENT: EXIT: PID: %i, CODE: %i, SEC: %i, NANO %i", filen, pid, WEXITSTATUS(status), data->seconds, data->nanoseconds);
-				if(WEXITSTATUS(status) == 21)
+				if (WEXITSTATUS(status) == 21)
 				{
 					exitcount++;
 					activeExecs--;
@@ -282,8 +284,8 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			}
 		}
 
-		if(exitcount == childMax && remainingExecs == 0)
-			break;		
+		if (exitcount == childMax && remainingExecs == 0)
+			break;
 	}
 
 	printf("((REMAINING: %i)))\n", remainingExecs);
