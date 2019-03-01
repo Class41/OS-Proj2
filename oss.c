@@ -18,18 +18,18 @@ char* filen;
 char* outfilename;
 
 
-struct Row {
+struct Row { //row from the file/input
 	int seconds;
 	int nanoseconds;
 	int arg;
 	int flag;
 };
 
-struct Row rows[50];
-int rowcount = -1;
-int timerinc;
+struct Row rows[50]; //accept up to x rows
+int rowcount = -1; //max rows stored
+int timerinc; //inc timer
 
-int parsefile(FILE* in)
+int parsefile(FILE* in) //reads in input file and parses input
 {
 	fscanf(in, "%i", &timerinc);
 	fgetc(in);
@@ -94,12 +94,12 @@ int parsefile(FILE* in)
 	}
 }
 
-int userready(int* tracker)
-{
+int userready(int* tracker) //loops through users and determines what users are ready to be launched
+{ 
 	int x;
 	for(x = 0; x < rowcount; x++)
 	{
-		if(rows[x].seconds < data->seconds && rows[x].nanoseconds < data->nanoseconds && rows[x].flag != 1337)
+		if(rows[x].seconds <= data->seconds && rows[x].nanoseconds <= data->nanoseconds && rows[x].flag != 1337)
 		{
 			*tracker = x;
 			return 1;
@@ -243,13 +243,13 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	int exitcount = 0;
 	FILE* o = fopen(output, "a");
 
-	while (exitcount < childMax) {
+	while (1) {
 		AddTime(&(data->seconds), &(data->nanoseconds), timerinc);
 
 		for (i = 0; i < childConcurMax; i++)
 		{
 			int usertracker = -1;
-			if (cPids[i] <= 0 && remainingExecs > 0 && userready(&usertracker) > 0)
+			if (cPids[i] == 0 && remainingExecs > 0 && userready(&usertracker) > 0)
 			{
 				remainingExecs--;
 				cPids[i] = fork();
@@ -259,7 +259,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 					printf("\n%s: ", filename);
 					fflush(stdout);
 					perror("Error: Failed to fork");
-					return;
+					handler(1);
 				}
 				else if (cPids[i] == 0) //if child
 				{
@@ -270,21 +270,33 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			if (cPids[i] > 0) //TODO: parent
 			{
 				rows[usertracker].flag = 1337;
-				if (childMax - exitcount > 1)
-					waitpid(cPids[i], &status, WNOHANG);
-				else
-					waitpid(cPids[i], &status, 0);
+				waitpid(cPids[i], &status, WNOHANG);
 
 				if (WIFEXITED(status))
 				{
 					if (WEXITSTATUS(status) == 21)
 					{
-						fprintf(o, "%s: CHILD PID: %i: RIP. fun while it lasted: %i sec %i nano.\n", filen, cPids[i], data->seconds, data->nanoseconds);						
+						fprintf(o, "%s: CHILD PID: %i: RIP. fun while it lasted: %i sec %i nano.\n", filen, cPids[i], data->seconds, data->nanoseconds);		
+						fflush(o);				
 						cPids[i] = 0;
 						exitcount++;
+						printf("Exit Count: %i\n", exitcount);
 					}
 				}
 			}
+		}
+
+		int sent = 0;
+		int n;
+		for(n = 0; n < childConcurMax; n++)
+		{
+		   if(cPids[i] > 0)
+		   	 sent = 1;
+		}
+
+		if(sent == 0 && childMax - exitcount == 0 && remainingExecs == 0)
+		{
+			break;
 		}
 	}
 

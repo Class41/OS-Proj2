@@ -61,12 +61,12 @@ int main(int argc, char** argv)
 	printf("%s: Argument got: %i, SHARED(%i %i), added seconds: %i, added nanoseconds: %i\n", argv[0], atoi(argv[1]), sharedTimeCurrentSec, sharedTimeCurrentNs, targtime.seconds, targtime.nanoseconds);
 	fflush(stdout);
 
-	while(data->seconds < targtime.seconds && data->nanoseconds < targtime.nanoseconds);
-	
-	shmdt(data);
-	printf("%s: PID: %i EXIT\n", filename, getpid());
+	while((data->seconds - targtime.seconds) < 0); //{ printf("Alive"); }
+	while((data->nanoseconds - targtime.nanoseconds) < 0); //{ printf("alive2: %i\n", data->nanoseconds - targtime.nanoseconds);}	
+
+	printf("%s: PID: %i EXIT AT: (%i %i) \n", filename, getpid(), data->seconds, data->nanoseconds);
 	fflush(stdout);
 
+	shmdt(data);
 	exit(21);	
-	return 0;
 }

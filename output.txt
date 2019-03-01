@@ -1,7 +1,7 @@
 ***Begin Of File***
 
-./oss: CHILD PID: 10800: RIP. fun while it lasted: 1 sec 143800 nano.
-./oss: CHILD PID: 10801: RIP. fun while it lasted: 1 sec 563700 nano.
-./oss: CHILD PID: 10802: RIP. fun while it lasted: 1 sec 2758400 nano.
-./oss: CHILD PID: 10804: RIP. fun while it lasted: 2 sec 30100 nano.
-./oss: PARENT: CLOCK: Seconds: 2 ns: 30100
+./oss: CHILD PID: 17391: RIP. fun while it lasted: 0 sec 494600 nano.
+./oss: CHILD PID: 17392: RIP. fun while it lasted: 0 sec 563700 nano.
+./oss: CHILD PID: 17393: RIP. fun while it lasted: 0 sec 2758400 nano.
+./oss: CHILD PID: 17395: RIP. fun while it lasted: 1 sec 30000 nano.
+./oss: PARENT: CLOCK: Seconds: 1 ns: 30000
