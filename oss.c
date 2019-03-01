@@ -274,13 +274,14 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 				if (WIFEXITED(status))
 				{
+					printf("\n%s: PARENT: EXIT: PID: %i, CODE: %i, SEC: %i, NANO %i", filen, cPids[i], WEXITSTATUS(status), data->seconds, data->nanoseconds);
 					if (WEXITSTATUS(status) == 21)
 					{
 						fprintf(o, "%s: CHILD PID: %i: RIP. fun while it lasted: %i sec %i nano.\n", filen, cPids[i], data->seconds, data->nanoseconds);		
 						fflush(o);				
 						cPids[i] = 0;
 						exitcount++;
-						printf("Exit Count: %i\n", exitcount);
+						printf(" Exit Count: %i\n", exitcount);
 					}
 				}
 			}
@@ -294,7 +295,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		   	 sent = 1;
 		}
 
-		if(sent == 0 && childMax - exitcount == 0 && remainingExecs == 0)
+		if(sent == 0 && childMax == exitcount && remainingExecs == 0)
 		{
 			break;
 		}

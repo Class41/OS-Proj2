@@ -68,5 +68,5 @@ int main(int argc, char** argv)
 	fflush(stdout);
 
 	shmdt(data);
-	exit(21);	
+	_Exit(21);	
 }
