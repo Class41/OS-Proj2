@@ -200,7 +200,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 {
 	outfilename = output;
 	numpids = childMax;
-	key_t shmkey = ftok("shmshare", 695);
+	key_t shmkey = ftok("shmshare", 765);
 
 	if (shmkey == -1) //check if the input file exists
 	{
@@ -246,6 +246,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	FILE* o = fopen(output, "a");
 
 	while (1) {
+		//printf("Parent Timer: %i %i\n", data->seconds, data->nanoseconds);
 		AddTime(&(data->seconds), &(data->nanoseconds), timerinc);
 
 		pid_t pid;
@@ -264,6 +265,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			{
 				DoFork(rows[usertracker].arg, output);
 			}
+			rows[usertracker].flag = 1337;
 			cPids[cPidsPos] = pid;
 			cPidsPos++;
 			activeExecs++;
@@ -273,13 +275,12 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		{
 			if (WIFEXITED(status))
 			{
-				printf("\n%s: PARENT: EXIT: PID: %i, CODE: %i, SEC: %i, NANO %i", filen, pid, WEXITSTATUS(status), data->seconds, data->nanoseconds);
+				//printf("\n%s: PARENT: EXIT: PID: %i, CODE: %i, SEC: %i, NANO %i", filen, pid, WEXITSTATUS(status), data->seconds, data->nanoseconds);
 				if (WEXITSTATUS(status) == 21)
 				{
 					exitcount++;
 					activeExecs--;
 					fprintf(o, "%s: CHILD PID: %i: RIP. fun while it lasted: %i sec %i nano.\n", filen, pid, data->seconds, data->nanoseconds);
-					printf("%i ended at %i %i \n", (int)pid, data->seconds, data->nanoseconds);
 				}
 			}
 		}

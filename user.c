@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 {
 	char* filename = argv[0];
 
-	key_t shmkey = ftok("shmshare", 695);
+	key_t shmkey = ftok("shmshare", 765);
 
 	if (shmkey == -1) //check if the input file exists
 	{
@@ -60,11 +60,12 @@ int main(int argc, char** argv)
 	//printf("%s: Argument got: %i, SHARED(%i %i), added seconds: %i, added nanoseconds: %i\n", argv[0], atoi(argv[1]), sharedTimeCurrentSec, sharedTimeCurrentNs, targtime.seconds, targtime.nanoseconds);
 	//fflush(stdout);
 
+
 	while((data->seconds - targtime.seconds) < 0);
 	while((data->nanoseconds - targtime.nanoseconds) < 0);	
 
-	//printf("%s: PID: %i EXIT AT: (%i %i) \n", filename, getpid(), data->seconds, data->nanoseconds);
-	//fflush(stdout);
+	printf("%s: PID: %i EXIT AT: (%i %i) \n", filename, getpid(), data->seconds, data->nanoseconds);
+	fflush(stdout);
 
 	shmdt(data);
 	_Exit(21);	
