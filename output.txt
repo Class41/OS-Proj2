@@ -1,8 +1,2 @@
 ***Begin Of File***
 
-./oss: CHILD PID: 20552: RIP. fun while it lasted: 0 sec 13800000 nano.
-./oss: CHILD PID: 20553: RIP. fun while it lasted: 0 sec 13825000 nano.
-./oss: CHILD PID: 20554: RIP. fun while it lasted: 0 sec 27675000 nano.
-./oss: CHILD PID: 20555: RIP. fun while it lasted: 1 sec 16625000 nano.
-./oss: CHILD PID: 20556: RIP. fun while it lasted: 4 sec 368350000 nano.
-./oss: PARENT: CLOCK: Seconds: 4 ns: 368350000

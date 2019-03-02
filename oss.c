@@ -25,7 +25,7 @@ struct Row { //row from the file/input
 	int flag;
 };
 
-struct Row rows[50]; //accept up to x rows
+struct Row rows[500]; //accept up to x rows
 int rowcount = -1; //max rows stored
 int timerinc; //inc timer
 
@@ -40,9 +40,9 @@ int parsefile(FILE* in) //reads in input file and parses input
 	while (!feof(in))
 	{
 		rowcount++;
-		if (rowcount > 50)
+		if (rowcount > 500)
 		{
-			printf("%s: PARENT: TOO MANY LINES IN FILE. MAX 50", filen);
+			printf("%s: PARENT: TOO MANY LINES IN FILE. MAX 500", filen);
 			return 1;
 		}
 
@@ -50,9 +50,10 @@ int parsefile(FILE* in) //reads in input file and parses input
 
 		char* value = strtok(line, " "); // split numbers by spaces
 
-		int fieldcount = 0;
+		int fieldcount = -1;
 		while (value != NULL) //check if token exists
 		{
+			fieldcount++;
 			if (fieldcount <= 2) //make sure the amount provided matches actual
 			{
 				switch (fieldcount)
@@ -74,15 +75,14 @@ int parsefile(FILE* in) //reads in input file and parses input
 				exit(1); //exit with error
 			}
 
-			fieldcount++;
 			value = strtok(NULL, " "); //get next token
 		}
 
-		/*if(!(rows[rowcount].seconds && rows[rowcount].nanoseconds && rows[rowcount].arg) && success != NULL)
+		if(fieldcount < 2 && success != NULL)
 		{
 			printf("\n%s: Error: Expected 3 values on line %i got less.\n", filen, rowcount + 1);
 			exit(1);
-		}*/
+		}
 
 	}
 
@@ -257,6 +257,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 
 			if (pid < 0)
 			{
+				perror("Failed to fork, exiting");
 				handler(1);
 			}
 
