@@ -266,6 +266,8 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			{
 				DoFork(rows[usertracker].arg, output);
 			}
+			
+			fprintf(o, "%s: PARENT: STARTING CHILD %i AT TIME SEC: %i NANO: %i\n", filen, pid, data->seconds, data->nanoseconds);
 			rows[usertracker].flag = 1337;
 			cPids[cPidsPos] = pid;
 			cPidsPos++;
@@ -296,6 +298,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 	fflush(o);
 	fclose(o);
 
+	free(cPids);
 	shmdt(data);
 	shmctl(ipcid, IPC_RMID, NULL);
 	exit(0);
@@ -382,6 +385,13 @@ int main(int argc, char** argv)
 	}
 
 	parsefile(input);
+
+	if(childMax > rowcount)
+	{
+		printf("%s: Not enough lines in file for max count: %i\n", filen, childMax);
+		exit(-1);	
+	}		
+		
 	DoSharedWork(argv[0], childMax, childConcurMax, input, outputName);
 
 	return 0;

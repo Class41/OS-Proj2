@@ -57,8 +57,8 @@ int main(int argc, char** argv)
 	int sharedTimeCurrentSec = data->seconds, sharedTimeCurrentNs = data->nanoseconds;
 	Target targtime = AddTime(sharedTimeCurrentSec, sharedTimeCurrentNs, atoi(argv[1]));
 	
-	//printf("%s: Argument got: %i, SHARED(%i %i), added seconds: %i, added nanoseconds: %i\n", argv[0], atoi(argv[1]), sharedTimeCurrentSec, sharedTimeCurrentNs, targtime.seconds, targtime.nanoseconds);
-	//fflush(stdout);
+	printf("%s: Argument got: %i, SHARED(%i %i), added seconds: %i, added nanoseconds: %i\n", argv[0], atoi(argv[1]), sharedTimeCurrentSec, sharedTimeCurrentNs, targtime.seconds, targtime.nanoseconds);
+	fflush(stdout);
 
 
 	while((data->seconds - targtime.seconds) < 0);
