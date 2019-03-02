@@ -1,0 +1,396 @@
+commit 4093a5f5004210fd04543770b0a86f2833ad513b
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:39:42 2019 -0600
+
+    added comments for oss
+
+commit 82b39e9b887c80fad587a16919991872a4c1d765
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:39:20 2019 -0600
+
+    added comments for oss
+
+commit 13adb746241f1afd7ee0db5a28d3bc3ba8cfa3a4
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Fri Mar 1 19:18:52 2019 -0600
+
+    updated readme
+
+commit 1664a04c5b39d0af504f2d0b4474f973689c959d
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:17:35 2019 -0600
+
+    added readme.md
+
+commit 46a07cd0090710336c651cadc0e3278e9ba01901
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:15:57 2019 -0600
+
+    added readme
+
+commit 091286c36d1b25f0fcf7401a9bc9c41bbfd5ab90
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:14:30 2019 -0600
+
+    added readme
+
+commit db9f920cc5d1f9532c6cb49c27d9ab6ae12983c0
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:12:16 2019 -0600
+
+    added readme
+
+commit 940e04e916c8f3a18c83942de8612b073c15c3c1
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:11:04 2019 -0600
+
+    added readme
+
+commit c5e566cd61297b71fe19c20b89624cfd64e4ca75
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:10:21 2019 -0600
+
+    added readme
+
+commit 9f09787dbc59bb55e583332183a7642078cb1138
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:09:12 2019 -0600
+
+    added readme
+
+commit fba5ad86b31e4b244f9ed2c0f48817663de80c4b
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 19:01:33 2019 -0600
+
+    added finishing touches
+
+commit a6001babad1feecb273c02d6504b23349b54d8d4
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 18:45:37 2019 -0600
+
+    fixed potential file errors
+
+commit b7cf8c0135533aa6f1dc9b401bf0ce2f1de58e3e
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 18:22:21 2019 -0600
+
+    almost done
+
+commit 77a9b88b6a262cea718099d6b40876e8c8ca4ec4
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Fri Mar 1 17:54:59 2019 -0600
+
+    finished rewrite
+
+commit 3bee2aabe44f17d72f818eae9a67ee2e0cb3075e
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Fri Mar 1 17:46:42 2019 -0600
+
+    finished rewrite
+
+commit 3a56dca195e48dd0bbd93264504f1dfb2f73986b
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 17:43:40 2019 -0600
+
+    started rewrite
+
+commit b41c34327c160c1b7624094910ba62547d386d08
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 16:02:38 2019 -0600
+
+    ??
+
+commit 6488058a81b0476d3070d017e495fb107d9c4b33
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 16:01:17 2019 -0600
+
+    commented out debug
+
+commit e42811bfdcc90809bc6cb28c3c17cf2078d4ffe1
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 13:55:42 2019 -0600
+
+    fixed?
+
+commit 60bc6fb7100014a4b25568d489cfb1d4171e7151
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 10:32:06 2019 -0600
+
+    I like breaking things
+
+commit 7173ea5616bfe152b2038f8102f8e6f4b7b39835
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 10:02:41 2019 -0600
+
+    I broke everything now. yay
+
+commit 03f30ef3dee7df2eb741c016f772414aea1e3645
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Fri Mar 1 08:12:03 2019 -0600
+
+    started overhauling clock
+
+commit 95c3e38c8265796d79f626c72beecd74a0d802eb
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Thu Feb 21 19:49:05 2019 -0600
+
+    finished
+
+commit 1bd5babcf7f73ccc67e0fe5ba9ec7ac9a8d46692
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Thu Feb 21 19:43:46 2019 -0600
+
+    finished fileparse
+
+commit 59b054b9ba878559c74ad6422bbdd090237aafb8
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Thu Feb 21 19:25:47 2019 -0600
+
+    started working on parsed integration
+
+commit da4b0259e98d067584bcbb40f5cad4caa8a250e4
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Thu Feb 21 18:51:07 2019 -0600
+
+    added file handler
+
+commit ae58e885db5b9adb89d31e2dba033e4a564d2027
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Thu Feb 21 18:12:25 2019 -0600
+
+    added file parsing
+
+commit a976c61df2b878ab412f777260f9aeb8ea2b4d83
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Thu Feb 21 17:54:10 2019 -0600
+
+    started adding file proc
+
+commit 692f516f665ced312d0ea771cfd870b36e8421f9
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Thu Feb 21 12:51:53 2019 -0600
+
+    added timer sig
+
+commit df6a9f73ad889b782cd3ef086be14f09f8a230fd
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Thu Feb 21 12:43:53 2019 -0600
+
+    added timer
+
+commit 74eec5d40862c37100e70cfb4b38c88db04f01d9
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Thu Feb 21 12:28:20 2019 -0600
+
+    pushed
+
+commit 8f4413bf688f6861e3a85e7ab36cbf5b49725cc0
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Wed Feb 20 20:50:36 2019 -0600
+
+    ioj
+
+commit 39446452456a1a055127de839a540df35230d0c4
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 20:46:59 2019 -0600
+
+    asdf
+
+commit f7bbaeed88bd47b6e074850e44bdf8874d2afb1e
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 20:22:57 2019 -0600
+
+    asdf"
+
+commit 8214a27c3d455bd219a1dfd09a8789a4b5959c01
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 19:51:30 2019 -0600
+
+    fixed return
+
+commit 5f4481c016256133d464ceeebc7767ac6bd3af9a
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 19:26:21 2019 -0600
+
+    added bork
+
+commit 61f52748bcd24f09dda4312cfb3f3c627f81382c
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 19:12:02 2019 -0600
+
+    added debug
+
+commit 82c55fae1062397aceebfab55343037f362c6df8
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 18:38:52 2019 -0600
+
+    added debug
+
+commit 9db520407812b93ee6dd3699ce50178280d60f23
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 18:28:45 2019 -0600
+
+    working on signal
+
+commit fc56a43bff21c2efa5576c5c61522804b7b0d9e8
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 18:16:54 2019 -0600
+
+    added pid couint
+
+commit 3d423b958150a17fd3de4486ff0988b94cba56f2
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Wed Feb 20 17:49:58 2019 -0600
+
+    added multi support
+
+commit 5fae15d58c2710395b913d2f01899a6d8067c96a
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 17:27:56 2019 -0600
+
+    fixed
+
+commit 8170d28ce4c06cd9ce9da3c0f8d23ed1bb030c23
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 17:13:15 2019 -0600
+
+    added kill messages
+
+commit b376fb996cbe6e685f43c884ec7222173e5e29e9
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 16:54:50 2019 -0600
+
+    added termination
+
+commit 8907b1d15c9583842d0f06370a0e1d63118675f0
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 16:33:33 2019 -0600
+
+    adding correctly
+
+commit e306f92634e929fbe40463e0795ba46f973dbe03
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 16:14:49 2019 -0600
+
+    added built timer
+
+commit b10dbb0401609c2d8c1142c569be4d96f1653132
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 09:49:18 2019 -0600
+
+    done for the morning
+
+commit dc92cab1ab50442f3f9e2df03eaee7e9f3dbe3d7
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 09:48:53 2019 -0600
+
+    done for the morning
+
+commit c16337d2640303a7df0de11e6f2d419dc6e07dd5
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 09:37:13 2019 -0600
+
+    addded 2 second kill timer
+
+commit 39f7e19a37af25c47bb4e8b470374b41b2813a4c
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 09:12:39 2019 -0600
+
+    added child addition
+
+commit 144760e369f6d439f98eb6af16ef63c53a7f4783
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 08:40:28 2019 -0600
+
+    added passing and execing
+
+commit 9cc397eb4e71f0d0650f070c0fd3f34f2360ed8a
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 00:29:00 2019 -0600
+
+    got things to work finally
+
+commit 359989054e2ac61c034e01399019fe209f05ff4f
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Wed Feb 20 00:12:38 2019 -0600
+
+    added error checking
+
+commit a6ba6853835b47cb63368161141dcf9deb8a3894
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Wed Feb 20 00:07:57 2019 -0600
+
+    adding debug code
+
+commit a9c064fb6b0a2efbf9351edace7c970e93d3b274
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Wed Feb 20 00:04:56 2019 -0600
+
+    ...
+
+commit 0ddcb9f08c94b5823a850175894975121c570eb2
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Tue Feb 19 23:50:18 2019 -0600
+
+    added error checking
+
+commit 97f3e8be1f48a1352cb6769c4ee01ddb45dd3e93
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Tue Feb 19 23:44:13 2019 -0600
+
+    ...
+
+commit 26f40ff9a9903b620ef6ddd16c7c13c63c44a60b
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Tue Feb 19 23:32:06 2019 -0600
+
+    shm test
+
+commit a9474c2f339b8b895219ebf45c64dcf922f9f1e1
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Tue Feb 19 23:30:26 2019 -0600
+
+    seg fault
+
+commit 90d7f53123aabdc53d7089df3857e75996a1c514
+Merge: 118ede5 b1e85ce
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Tue Feb 19 23:07:32 2019 -0600
+
+    Merge branch 'master' of https://github.com/Class41/OS-Proj2
+
+commit 118ede5cbe02e8f51cfccde947616314adf9da96
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Tue Feb 19 23:07:16 2019 -0600
+
+    added shared memory
+
+commit b1e85ce9455252a93f344853a5d6f1321670bc19
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Tue Feb 19 22:59:44 2019 -0600
+
+    added new files
+
+commit 17d904ababde30a0314212994fa14876152efec2
+Author: vasyl onufriyev <onufriye@hoare7.cs.umsl.edu>
+Date:   Tue Feb 19 22:57:28 2019 -0600
+
+    updated file names
+
+commit a74f07758a5ad5d7cc2b37a2958e04adc2a2cabc
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Tue Feb 19 22:53:24 2019 -0600
+
+    added updated makefile
+
+commit 4523b440d7f46edb5467a461764305324acf92e9
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Tue Feb 19 22:51:09 2019 -0600
+
+    added shared struct
+
+commit e4f391280c698362ee3378dad666d5b45a8d7845
+Author: Vasyl Onufriyev <projectclass41@gmail.com>
+Date:   Tue Feb 19 22:25:10 2019 -0600
+
+    initial commit
