@@ -1,11 +1,11 @@
 ***Begin Of File***
 
-./oss: PARENT: STARTING CHILD 23206 AT TIME SEC: 0 NANO: 75000
-./oss: PARENT: STARTING CHILD 23207 AT TIME SEC: 0 NANO: 575000
-./oss: CHILD PID: 23206: RIP. fun while it lasted: 0 sec 15950000 nano.
-./oss: PARENT: STARTING CHILD 23208 AT TIME SEC: 0 NANO: 15975000
-./oss: CHILD PID: 23207: RIP. fun while it lasted: 0 sec 16475000 nano.
-./oss: CHILD PID: 23208: RIP. fun while it lasted: 0 sec 32875000 nano.
-./oss: PARENT: STARTING CHILD 23209 AT TIME SEC: 1 NANO: 50000
-./oss: CHILD PID: 23209: RIP. fun while it lasted: 1 sec 25550000 nano.
-./oss: PARENT: CLOCK: Seconds: 1 ns: 25550000
+./oss: PARENT: STARTING CHILD 25503 AT TIME SEC: 0 NANO: 75000
+./oss: PARENT: STARTING CHILD 25504 AT TIME SEC: 0 NANO: 575000
+./oss: CHILD PID: 25503: RIP. fun while it lasted: 0 sec 22150000 nano.
+./oss: PARENT: STARTING CHILD 25505 AT TIME SEC: 0 NANO: 22175000
+./oss: CHILD PID: 25504: RIP. fun while it lasted: 0 sec 22350000 nano.
+./oss: CHILD PID: 25505: RIP. fun while it lasted: 0 sec 37875000 nano.
+./oss: PARENT: STARTING CHILD 25506 AT TIME SEC: 1 NANO: 50000
+./oss: CHILD PID: 25506: RIP. fun while it lasted: 1 sec 18075000 nano.
+./oss: PARENT: CLOCK: Seconds: 1 ns: 18075000
