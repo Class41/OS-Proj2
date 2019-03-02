@@ -1,4 +1,4 @@
-# README
+#README
 
 ***
 
@@ -7,17 +7,17 @@ Date Finished: 3-1-19
 
 ***
 
-## Purpose
+##Purpose
 
 OSS will create n many children in total with s many at a time concurrently. This project was done as an OS project in spring 2019.
 
-## How to Run
+##How to Run
 `
 $ make
 $ ./oss 
 `
 
-### Options:
+###Options:
 
 `
 -h -> show help menu
@@ -27,7 +27,7 @@ $ ./oss
 -o -> output file
 `
 
-### File Format:
+###File Format:
 `
 int
 int int int
@@ -36,3 +36,6 @@ int int int
 .
 .
 `
+
+Line1: Increment count
+Line 2 - n: seconds, nanoseconds to start, nanoseconds to die
