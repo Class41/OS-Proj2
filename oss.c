@@ -1,3 +1,8 @@
+//Vasyl Onufriyev
+//3-1-19
+//OS Spring 2019
+//Launches n many children in s bursts
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -10,12 +15,12 @@
 #include <signal.h>
 #include <sys/time.h>
 
-int* cPids;
-int numpids;
-int ipcid;
-Shared* data;
-char* filen;
-char* outfilename;
+int* cPids; //list of pids
+int numpids; //count of pids
+int ipcid; //inter proccess shared memory
+Shared* data; //shared data struct
+char* filen; //filename
+char* outfilename; //output filename
 
 
 struct Row { //row from the file/input
@@ -31,13 +36,13 @@ int timerinc; //inc timer
 
 int parsefile(FILE* in) //reads in input file and parses input
 {
-	fscanf(in, "%i", &timerinc);
-	fgetc(in);
+	fscanf(in, "%i", &timerinc); //get iteration count
+	fgetc(in); //eat newline
 
 	char line[1000];
 
 	printf("%s: PARENT: BEGIN FILE PARSE\n", filen);
-	while (!feof(in))
+	while (!feof(in)) //keep reading until end of line
 	{
 		rowcount++;
 		if (rowcount > 500)
@@ -78,7 +83,7 @@ int parsefile(FILE* in) //reads in input file and parses input
 			value = strtok(NULL, " "); //get next token
 		}
 
-		if(fieldcount < 2 && success != NULL)
+		if(fieldcount < 2 && success != NULL) //when < 3 elements on a line
 		{
 			printf("\n%s: Error: Expected 3 values on line %i got less.\n", filen, rowcount + 1);
 			exit(1);
@@ -87,7 +92,7 @@ int parsefile(FILE* in) //reads in input file and parses input
 	}
 
 	int i;
-	for (i = 0; i < rowcount; i++)
+	for (i = 0; i < rowcount; i++) //output parse data
 	{
 		printf("%s: PARENT: PARSED: sec: %i, nano %i, offset %i\n", filen, rows[i].seconds, rows[i].nanoseconds, rows[i].arg);
 		fflush(stdout);
@@ -97,11 +102,11 @@ int parsefile(FILE* in) //reads in input file and parses input
 int userready(int* tracker) //loops through users and determines what users are ready to be launched
 {
 	int x;
-	for (x = 0; x < rowcount; x++)
+	for (x = 0; x < rowcount; x++) //seeks ready users by comparing clock to launch start time. Ignores launched rows.
 	{
 		if (rows[x].seconds <= data->seconds && rows[x].nanoseconds <= data->nanoseconds && rows[x].flag != 1337)
 		{
-			*tracker = x;
+			*tracker = x; //returns position of ready struct
 			return 1;
 		}
 	}
@@ -109,12 +114,12 @@ int userready(int* tracker) //loops through users and determines what users are 
 }
 
 
-void timerhandler(int sig)
+void timerhandler(int sig) //2 second kill timer
 {
 	handler(sig);
 }
 
-int setupinterrupt()
+int setupinterrupt() //setup interrupt handling
 {
 	struct sigaction act;
 	act.sa_handler = timerhandler;
@@ -122,7 +127,7 @@ int setupinterrupt()
 	return (sigemptyset(&act.sa_mask) || sigaction(SIGPROF, &act, NULL));
 }
 
-int setuptimer()
+int setuptimer() //setup timer handling
 {
 	struct itimerval value;
 	value.it_interval.tv_sec = 2;
@@ -131,7 +136,7 @@ int setuptimer()
 	return (setitimer(ITIMER_PROF, &value, NULL));
 }
 
-void handler(int signal)
+void handler(int signal) //handle ctrl-c and timer hit
 {
 	printf("%s: Kill Signal Caught. Killing children and terminating...", filen);
 	fflush(stdout);
@@ -139,29 +144,29 @@ void handler(int signal)
 	int i;
 	for (i = 0; i < numpids; i++)
 	{
-		if (cPids[i] > 0)
+		if (cPids[i] > 0) //kill all pids just in case
 		{
 			kill(cPids[i], SIGTERM);
 		}
 	}
 
-	FILE* out = fopen(outfilename, "a");
+	FILE* out = fopen(outfilename, "a"); //write clock to file
 	fprintf(out, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filen, data->seconds, data->nanoseconds);
 	fclose(out);
 
 
-	free(cPids);
-	shmctl(ipcid, IPC_RMID, NULL);
+	free(cPids); //free used memory
+	shmctl(ipcid, IPC_RMID, NULL); //free shared mem
 
 
-	kill(getpid(), SIGTERM);
+	kill(getpid(), SIGTERM); //kill self
 }
 
 void AddTime(int* seconds, int* nano, int amount)
 {
-	int newnano = *nano + amount;
+	int newnano = *nano + amount; 
 
-	while (newnano >= 1000000000)
+	while (newnano >= 1000000000) //nano = 10^9, so keep dividing until we get to something less and increment seconds
 	{
 		newnano -= 1000000000;
 		(*seconds)++;
@@ -169,23 +174,23 @@ void AddTime(int* seconds, int* nano, int amount)
 	*nano = newnano;
 }
 
-void DoFork(int value, char* output)
+void DoFork(int value, char* output) //do fun fork stuff here. I know, very useful comment.
 {
 	char* convert[15];
-	sprintf(convert, "%i", value);
+	sprintf(convert, "%i", value); //convert int to char in the most inneficient way possible 
 	char* forkarg[] = {
 			"./user",
 			convert,
 			output,
 			NULL
-	};
+	}; //null terminated parameter array of chars
 
-	execv(forkarg[0], forkarg);
-	printf("Exec failed! Aborting.");
-	exit(0);
+	execv(forkarg[0], forkarg); //exec
+	printf("Exec failed! Aborting."); //all is lost. we couldn't fork. Blast.
+	handler(1);
 }
 
-int checkPIDs(int* pids, int count)
+int checkPIDs(int* pids, int count) //deprecated. used to check if any pids were still alive. Think of this as a piece of history.
 {
 	int i;
 	for (i = 0; i < count; i++)
@@ -196,11 +201,11 @@ int checkPIDs(int* pids, int count)
 	return 0;
 }
 
-void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, char* output)
+void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input, char* output) //This is where the magic happens. Forking, and execs be here
 {
-	outfilename = output;
-	numpids = childMax;
-	key_t shmkey = ftok("shmshare", 765);
+	outfilename = output; //global outpt filename
+	numpids = childMax;  //global pid count
+	key_t shmkey = ftok("shmshare", 765); //shared mem key
 
 	if (shmkey == -1) //check if the input file exists
 	{
@@ -210,7 +215,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		return;
 	}
 
-	ipcid = shmget(shmkey, sizeof(Shared), 0600 | IPC_CREAT);
+	ipcid = shmget(shmkey, sizeof(Shared), 0600 | IPC_CREAT); //get shared mem
 
 	if (ipcid == -1) //check if the input file exists
 	{
@@ -220,7 +225,7 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		return;
 	}
 
-	data = (Shared*)shmat(ipcid, (void*)0, 0);
+	data = (Shared*)shmat(ipcid, (void*)0, 0); //attach to shared mem
 
 	if (data == (void*)-1) //check if the input file exists
 	{
@@ -230,56 +235,56 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 		return;
 	}
 
-	data->seconds = 0;
-	data->nanoseconds = 0;
+	data->seconds = 0; //give the computer amnesia. Gotta reset shared mem.
+	data->nanoseconds = 0; //make sure it has amnesia for sure. Gotta reset shared mem.
 
-	cPids = calloc(childMax, sizeof(int));
+	cPids = calloc(childMax, sizeof(int)); //dynamically allocate a array of pids
 
-	int status;
-	signal(SIGQUIT, handler);
-	signal(SIGINT, handler);
-	int i;
-	int remainingExecs = childMax;
-	int activeExecs = 0;
-	int exitcount = 0;
-	int cPidsPos = 0;
-	FILE* o = fopen(output, "a");
+	int status; //keeps track of status of waited pids
+	signal(SIGQUIT, handler); //Pull keycombos
+	signal(SIGINT, handler); //pull keycombos
+	int i; //generic iterator. I call him bob.
+	int remainingExecs = childMax; 
+	int activeExecs = 0; //how many execs are going right now
+	int exitcount = 0; //how many exits we got
+	int cPidsPos = 0; //wher we are in the cpid array
+	FILE* o = fopen(output, "a"); //open the output file
 
 	while (1) {
 		//printf("Parent Timer: %i %i\n", data->seconds, data->nanoseconds);
 		AddTime(&(data->seconds), &(data->nanoseconds), timerinc);
 
-		pid_t pid;
-		int usertracker = -1;
+		pid_t pid; //pid temp
+		int usertracker = -1; //updated by userready to the position of ready struct to be launched
 		if (activeExecs < childConcurMax && remainingExecs > 0 && userready(&usertracker) > 0)
 		{
-			pid = fork();
+			pid = fork(); //the mircle of proccess creation
 
-			if (pid < 0)
+			if (pid < 0) //...or maybe not proccess creation if this executes
 			{
 				perror("Failed to fork, exiting");
 				handler(1);
 			}
 
-			remainingExecs--;
+			remainingExecs--; //we have less execs now since we launched successfully
 			if (pid == 0)
 			{
-				DoFork(rows[usertracker].arg, output);
+				DoFork(rows[usertracker].arg, output); //do the fork thing with exec followup
 			}
 			
-			fprintf(o, "%s: PARENT: STARTING CHILD %i AT TIME SEC: %i NANO: %i\n", filen, pid, data->seconds, data->nanoseconds);
-			rows[usertracker].flag = 1337;
-			cPids[cPidsPos] = pid;
-			cPidsPos++;
-			activeExecs++;
+			fprintf(o, "%s: PARENT: STARTING CHILD %i AT TIME SEC: %i NANO: %i\n", filen, pid, data->seconds, data->nanoseconds); //we are parent. We have made child at this time
+			rows[usertracker].flag = 1337; //set usertracker to already executed so it is ignored
+			cPids[cPidsPos] = pid; //add pid to pidlist
+			cPidsPos++; //increment pid list
+			activeExecs++; //increment active execs
 		}
 
-		if ((pid = waitpid((pid_t)-1, &status, WNOHANG)) > 0)
+		if ((pid = waitpid((pid_t)-1, &status, WNOHANG)) > 0) //if a PID is returned
 		{
 			if (WIFEXITED(status))
 			{
 				//printf("\n%s: PARENT: EXIT: PID: %i, CODE: %i, SEC: %i, NANO %i", filen, pid, WEXITSTATUS(status), data->seconds, data->nanoseconds);
-				if (WEXITSTATUS(status) == 21)
+				if (WEXITSTATUS(status) == 21) //21 is my custom return val
 				{
 					exitcount++;
 					activeExecs--;
@@ -288,42 +293,42 @@ void DoSharedWork(char* filename, int childMax, int childConcurMax, FILE* input,
 			}
 		}
 
-		if (exitcount == childMax && remainingExecs == 0)
+		if (exitcount == childMax && remainingExecs == 0) //only get out of loop if we run out of execs or we have maxed out child count
 			break;
 	}
 
 	printf("((REMAINING: %i)))\n", remainingExecs);
 
-	fprintf(o, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds);
+	fprintf(o, "%s: PARENT: CLOCK: Seconds: %i ns: %i\n", filename, data->seconds, data->nanoseconds); //final clock reading and write
 	fflush(o);
 	fclose(o);
 
-	free(cPids);
-	shmdt(data);
-	shmctl(ipcid, IPC_RMID, NULL);
+	free(cPids); //free up memory
+	shmdt(data); //detatch from shared mem
+	shmctl(ipcid, IPC_RMID, NULL); //clear shared mem
 	exit(0);
 }
 
 int main(int argc, char** argv)
 {
-	if (setupinterrupt() == -1)
+	if (setupinterrupt() == -1) //handler for SIGPROF failed
 	{
 		perror("Failed to setup handler for SIGPROF");
 		return 1;
 	}
-	if (setuptimer() == -1)
+	if (setuptimer() == -1) //timer failed
 	{
 		perror("Failed to setup ITIMER_PROF interval timer");
 		return 1;
 	}
 
-	filen = argv[0];
-	int optionItem;
-	int childMax = 4;
-	int childConcurMax = 2;
+	filen = argv[0]; //shorthand for filename
+	int optionItem; 
+	int childMax = 4; //default
+	int childConcurMax = 2; //default
 
 	char* inputName = malloc(50 * sizeof(char) + 1); //store filenames
-	char* outputName = malloc(50 * sizeof(char) + 1);
+	char* outputName = malloc(50 * sizeof(char) + 1); //create space for output default
 
 	strcpy(inputName, "input.txt"); //put initial strings into the malloc
 	strcpy(outputName, "output.txt");
@@ -384,15 +389,15 @@ int main(int argc, char** argv)
 		return;
 	}
 
-	parsefile(input);
+	parsefile(input); //read file contents
 
-	if(childMax > rowcount)
+	if(childMax > rowcount) //if we asked for more children than the file can supply
 	{
 		printf("%s: Not enough lines in file for max count: %i\n", filen, childMax);
 		exit(-1);	
 	}		
 		
-	DoSharedWork(argv[0], childMax, childConcurMax, input, outputName);
+	DoSharedWork(argv[0], childMax, childConcurMax, input, outputName); //do fork/exec fun stuff
 
 	return 0;
 }
